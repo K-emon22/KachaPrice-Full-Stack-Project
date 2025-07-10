@@ -1,0 +1,11 @@
+.text-black {
+  color: var(--bc) !important;
+}
+
+.bg-white {
+  background-color: var(--b1) !important;
+}
+
+.text-white {
+  color: var(--bc) !important;
+}
