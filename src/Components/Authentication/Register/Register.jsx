@@ -1,3 +1,4 @@
+
 import {Link, useNavigate} from "react-router";
 import {useContext, useEffect, useState} from "react";
 import {FaGoogle} from "react-icons/fa";
@@ -7,13 +8,16 @@ import {updateProfile} from "firebase/auth";
 import {toast} from "react-toastify";
 import Loader from "../../Loader/Loader";
 import {Fade} from "react-awesome-reveal";
+import axios from "axios";
 
 const Register = () => {
   const {googleLogin, createUser} = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
- 
+  const [createdAt, setCreatedAt] = useState("");
+  const [userRole] = useState("user"); // default role
+
   const {
     register,
     handleSubmit,
@@ -23,6 +27,13 @@ const Register = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }); // 22 June 2025
+    setCreatedAt(formattedDate);
     return () => clearTimeout(timer);
   }, []);
 
@@ -35,6 +46,17 @@ const Register = () => {
       await updateProfile(user, {
         displayName: data.name,
         photoURL: data.photo,
+      });
+
+      const token = await user.getIdToken();
+      localStorage.setItem("accessToken", token);
+
+      await axios.post("http://localhost:3000/users", {
+        name: data.name,
+        email: data.email,
+        photoURL: data.photo,
+        createdAt,
+        role: userRole,
       });
 
       reset();
@@ -55,7 +77,24 @@ const Register = () => {
   const loginWithGoogle = async () => {
     setSubmitting(true);
     try {
-      await googleLogin();
+      const result = await googleLogin();
+      const user = result.user;
+
+      const token = await user.getIdToken();
+      localStorage.setItem("accessToken", token);
+
+      await axios.post("http://localhost:3000/users", {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: new Date().toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+        role: userRole,
+      });
+
       navigate("/");
     } catch {
       toast.error("Google login failed. Please try again.", {
@@ -150,6 +189,10 @@ const Register = () => {
             </p>
           )}
 
+          {/* Hidden Inputs */}
+          <input type="hidden" {...register("createdAt")} value={createdAt} />
+          <input type="hidden" {...register("UserRole")} value={userRole} />
+
           <button
             type="button"
             onClick={loginWithGoogle}
@@ -172,7 +215,7 @@ const Register = () => {
             Already have an account?
             <Link
               to="/login"
-              className="text-green-600  hover:underline ml-1 font-semibold"
+              className="text-green-600 hover:underline ml-1 font-semibold"
             >
               <br className="sm:hidden" />
               Login Now

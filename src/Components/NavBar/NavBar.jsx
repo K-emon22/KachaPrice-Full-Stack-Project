@@ -23,6 +23,7 @@ const NavBAr = () => {
 
   const {user, loading} = useContext(AuthContext);
   const navigate = useNavigate();
+console.log(user);
 
   const logOut = () => {
     signOut(Auth);
@@ -290,7 +291,7 @@ const NavBAr = () => {
                   {user ? (
                     <div className="w-full">
                       <hr className="mb-2 mt-4" />
-                      <but
+                      <button
                         onClick={() => {
                           Swal.fire({
                             title: "Are you sure You Want To Logout?",
@@ -315,7 +316,7 @@ const NavBAr = () => {
                         className="btnnnnn w-full"
                       >
                         Logout
-                      </but>
+                      </button>
                     </div>
                   ) : (
                     <div className="w-full">
