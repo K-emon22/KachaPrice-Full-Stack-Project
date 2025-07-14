@@ -114,7 +114,7 @@ const ProductDetails = () => {
                 <p>
                   <span className="font-semibold">📍 Market:</span> {product.market || "N/A"}
                 </p>
-                <p>
+                <p> 
                   <span className="font-semibold">💰 Price: </span>{" "}
                   <span className="text-green-600 font-bold"> {product.price} </span>৳
                 </p>
