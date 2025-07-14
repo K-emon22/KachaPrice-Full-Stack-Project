@@ -1,29 +1,31 @@
-
-import {Link, useNavigate} from "react-router";
-import {useContext, useEffect, useState} from "react";
-import {FaGoogle} from "react-icons/fa";
-import {useForm} from "react-hook-form";
-import {AuthContext} from "../../ContextFiles/AuthContext";
-import {updateProfile} from "firebase/auth";
-import {toast} from "react-toastify";
+import { Link, useNavigate, useLocation } from "react-router"; // use *react-router-dom*
+import { useContext, useEffect, useState } from "react";
+import { FaGoogle } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../ContextFiles/AuthContext";
+import { updateProfile } from "firebase/auth";
+import { toast } from "react-toastify";
 import Loader from "../../Loader/Loader";
-import {Fade} from "react-awesome-reveal";
+import { Fade } from "react-awesome-reveal";
 import axios from "axios";
 
 const Register = () => {
-  const {googleLogin, createUser} = useContext(AuthContext);
+  const { googleLogin, createUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [createdAt, setCreatedAt] = useState("");
-  const [userRole] = useState("user"); // default role
+  const [userRole] = useState("user");
 
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     reset,
-  } = useForm({mode: "onChange"});
+  } = useForm({ mode: "onChange" });
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
@@ -32,7 +34,7 @@ const Register = () => {
       day: "2-digit",
       month: "long",
       year: "numeric",
-    }); // 22 June 2025
+    });
     setCreatedAt(formattedDate);
     return () => clearTimeout(timer);
   }, []);
@@ -60,14 +62,14 @@ const Register = () => {
       });
 
       reset();
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
       const messages = {
         "auth/email-already-in-use": "Email is already in use.",
         "auth/invalid-email": "Invalid email address.",
       };
       toast.error(messages[err.code] || err.message || "Registration failed.", {
-        style: {background: "#fecaca"},
+        style: { background: "#fecaca" },
       });
     } finally {
       setSubmitting(false);
@@ -95,10 +97,10 @@ const Register = () => {
         role: userRole,
       });
 
-      navigate("/");
+      navigate(from, { replace: true });
     } catch {
       toast.error("Google login failed. Please try again.", {
-        style: {background: "#fecaca"},
+        style: { background: "#fecaca" },
       });
     } finally {
       setSubmitting(false);

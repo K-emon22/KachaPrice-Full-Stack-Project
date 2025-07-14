@@ -1,5 +1,9 @@
-import {GoogleAuthProvider} from "firebase/auth";
-import {AuthContext} from "./AuthContext";
+
+
+
+
+import { GoogleAuthProvider } from "firebase/auth";
+import { AuthContext } from "./AuthContext";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -7,12 +11,13 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import {Auth} from "../FirebaseAuth/FirebaseAuth";
-import {useEffect, useState} from "react";
+import { Auth } from "../FirebaseAuth/FirebaseAuth";
+import { useEffect, useState } from "react";
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [accessToken, setAccessToken] = useState(null); // ✅ New
   const provider = new GoogleAuthProvider();
 
   const createUser = (email, password) => {
@@ -26,17 +31,30 @@ export const AuthProvider = ({children}) => {
   const googleLogin = () => {
     return signInWithPopup(Auth, provider);
   };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    return signOut(Auth);
+  };
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(Auth, (currentuser) => {
-      setUser(currentuser);
+    const unsubscribe = onAuthStateChanged(Auth, async (currentUser) => {
+      setUser(currentUser);
       setLoading(false);
+
+      if (currentUser) {
+        const token = await currentUser.getIdToken();
+        setAccessToken(token);
+        localStorage.setItem("accessToken", token);
+      } else {
+        setAccessToken(null);
+        localStorage.removeItem("accessToken");
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
-  const logout = () => {
-    return signOut(Auth);
-  };
   const exports = {
     createUser,
     googleLogin,
@@ -44,7 +62,8 @@ export const AuthProvider = ({children}) => {
     user,
     loading,
     logout,
+    accessToken, // ✅ Export this for global use
   };
 
-  return <AuthContext value={exports}>{children} </AuthContext>;
+  return <AuthContext value={exports}>{children}</AuthContext>;
 };

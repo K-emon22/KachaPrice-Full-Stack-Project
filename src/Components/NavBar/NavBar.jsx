@@ -23,11 +23,17 @@ const NavBAr = () => {
 
   const {user, loading} = useContext(AuthContext);
   const navigate = useNavigate();
-console.log(user);
+  console.log(user);
 
   const logOut = () => {
-    signOut(Auth);
-    navigate("/");
+    signOut(Auth)
+      .then(() => {
+        localStorage.removeItem("accessToken"); // ✅ Remove the token
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Logout failed:", error);
+      });
   };
 
   const pages = (
@@ -51,7 +57,7 @@ console.log(user);
       </NavLink>
 
       <NavLink
-        to={"/bookshelf"}
+        to={"/allproduct"}
         className="relative px-2 py-1 font-semibold text-black overflow-hidden"
       >
         {({isActive}) => (
@@ -61,7 +67,7 @@ console.log(user);
                 isActive ? "scale-x-100" : "scale-x-0"
               } origin-left rounded-lg`}
             />
-            <span className="relative z-10">Bookshelf</span>
+            <span className="relative z-10">All Product</span>
           </>
         )}
       </NavLink>
