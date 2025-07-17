@@ -77,7 +77,7 @@ const Profile = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
-      <motion.div
+      <motion.div 
         className="w-full max-w-4xl bg-gradient-to-br from-green-50 to-green-100  rounded-3xl shadow-2xl p-8 md:p-12 space-y-8"
         initial={{ y: 60 }}
         animate={{ y: 0 }}
