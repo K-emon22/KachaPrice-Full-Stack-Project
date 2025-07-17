@@ -130,7 +130,7 @@ const ProductCompare = ({ productId }) => {
   }
 
   return (
-    <section className="mx-[2%] lg:mx-[5%] my-16 bg-white rounded-lg shadow-md">
+    <section className=" my-16 bg-white rounded-lg shadow-md">
       <h2 className="text-3xl font-extrabold text-green-600 text-center mb-8">
         📊 Price Trend Comparison
       </h2>

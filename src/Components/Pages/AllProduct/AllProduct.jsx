@@ -14,14 +14,14 @@ const AllProduct = () => {
   const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(true);
   console.log(allVeg);
-  
+
   useEffect(() => {
     window.scrollTo({top: 0, behavior: "smooth"});
   }, []);
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       fetchProducts();
-    }, 300);
+    }, 1);
     return () => clearTimeout(delayDebounce);
   }, [searchText, sort, fromDate, toDate]);
 
@@ -46,7 +46,7 @@ const AllProduct = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="mx-[2%] lg:mx-[5%] text-black min-h-screen">
+    <div className="mx-[2%] lg:mx-[5%] text-black min-h-screen pb-12">
       <motion.h1
         initial={{opacity: 0, y: -20}}
         animate={{opacity: 1, y: 0}}

@@ -12,8 +12,6 @@
 
  */
 
-
-
 /* Green theme button with hover scale and border glow animation */
 /* Green Theme Button */
 .btn-primary {
@@ -66,7 +64,6 @@
   box-shadow: none;
   display: inline-block;
   user-select: none;
-
 }
 
 .btn-red:hover,
@@ -87,4 +84,13 @@
   to {
     box-shadow: 0 0 5px 2.5px rgba(220, 38, 38, 0.5);
   }
+}
+
+.swiper-pagination-bullet {
+  background-color: white !important;
+  opacity: 0.7;
+}
+.swiper-pagination-bullet-active {
+  background-color: white !important;
+  opacity: 1;
 }

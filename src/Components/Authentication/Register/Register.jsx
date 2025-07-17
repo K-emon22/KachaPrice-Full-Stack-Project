@@ -110,7 +110,7 @@ const Register = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="px-[2%] lg:px-[5%] flex flex-col justify-center items-center bg-white dark:bg-gray-900">
+    <div className="px-[2%] lg:px-[5%] flex flex-col justify-center items-center bg-white ">
       <Fade direction="down" cascade duration={800}>
         <h1 className="text-3xl sm:text-5xl font-bold text-center text-green-600 dark:text-green-400 mb-6">
           Register Now
@@ -213,7 +213,7 @@ const Register = () => {
             {submitting ? "Registering..." : "Register"}
           </button>
 
-          <p className="text-center text-black dark:text-white mt-4">
+          <p className="text-center text-black  mt-4">
             Already have an account?
             <Link
               to="/login"

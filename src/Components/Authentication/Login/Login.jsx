@@ -67,7 +67,7 @@ const Login = () => {
   if (loder) return <Loader />;
 
   return (
-    <div className="px-[2%] lg:px-[5%] flex flex-col justify-center items-center bg-white dark:bg-gray-900">
+    <div className="px-[2%] lg:px-[5%] flex flex-col justify-center items-center bg-white ">
       <Fade direction="down" cascade duration={800}>
         <h1 className="text-3xl sm:text-5xl font-bold text-center text-green-600 dark:text-green-400 mb-6">
           Login Now
@@ -137,7 +137,7 @@ const Login = () => {
             Login
           </button>
 
-          <p className="text-center text-black dark:text-white mt-4">
+          <p className="text-center text-black mt-4">
             Don&apos;t have an account?
             <Link
               to={"/register"}
