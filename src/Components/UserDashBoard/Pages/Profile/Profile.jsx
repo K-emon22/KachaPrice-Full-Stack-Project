@@ -69,7 +69,7 @@ const Profile = () => {
       toast.error("Failed to update profile image.");
     }
   };
-
+  
   return (
     <motion.div
       className="w-full min-h-screen p-6 flex justify-center items-center "
