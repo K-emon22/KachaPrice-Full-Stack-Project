@@ -13,7 +13,7 @@ import {
 
 import { motion } from "framer-motion";
 
-const PriceTrendDashboard = () => {
+const PriceTrend = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [priceData, setPriceData] = useState([]);
@@ -233,4 +233,4 @@ const PriceTrendDashboard = () => {
   );
 };
 
-export default PriceTrendDashboard;
+export default PriceTrend;  
