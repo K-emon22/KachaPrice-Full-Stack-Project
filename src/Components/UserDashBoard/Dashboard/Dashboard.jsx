@@ -461,7 +461,7 @@ const Dashboard = () => {
                   animate={{ opacity: 0.7 }}
                   exit={{ opacity: 0 }}
                   className="fixed inset-0 bg-black z-40"
-                  aria-hidden="true"
+                  aria-hidden="true" 
                 />
               </>
             )}
