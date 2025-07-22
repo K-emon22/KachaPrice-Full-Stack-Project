@@ -46,6 +46,8 @@ export const AuthProvider = ({ children }) => {
         const token = await currentUser.getIdToken();
         setAccessToken(token);
         localStorage.setItem("accessToken", token);
+        console.log(token);
+        
       } else {
         setAccessToken(null);
         localStorage.removeItem("accessToken");
@@ -62,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     logout,
-    accessToken, // ✅ Export this for global use
+    accessToken, 
   };
 
   return <AuthContext value={exports}>{children}</AuthContext>;

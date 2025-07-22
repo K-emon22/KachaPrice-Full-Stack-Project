@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import {
   BarChart,
@@ -11,7 +11,7 @@ import {
   Legend,
   Cell,
 } from "recharts";
-import { AuthContext } from "../../../ContextFiles/AuthContext";
+import {AuthContext} from "../../../ContextFiles/AuthContext";
 
 const colors = [
   "#3182ce",
@@ -35,8 +35,8 @@ const normalizeDate = (input) => {
   return dateObj.toISOString().split("T")[0];
 };
 
-const ProductCompare = ({ productId }) => {
-  const { accessToken } = useContext(AuthContext);
+const ProductCompare = ({productId}) => {
+  const {accessToken} = useContext(AuthContext);
   const [prices, setPrices] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [priceDiff, setPriceDiff] = useState(null);
@@ -50,9 +50,12 @@ const ProductCompare = ({ productId }) => {
           return;
         }
 
-        const res = await axios.get(`http://localhost:3000/product/${productId}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API}/allProduct/approved/${productId}`,
+          {
+            headers: {Authorization: `Bearer ${accessToken}`},
+          }
+        );
 
         const product = res.data;
 
@@ -67,13 +70,13 @@ const ProductCompare = ({ productId }) => {
           return;
         }
 
-        const basePrice = { date: baseDate, price: product.price };
+        const basePrice = {date: baseDate, price: product.price};
 
         const normalizedPrices = (product.prices || [])
           .map((p) => {
             const date = normalizeDate(p.date);
             if (!date || p.price == null) return null;
-            return { date, price: p.price };
+            return {date, price: p.price};
           })
           .filter(Boolean);
 
@@ -136,7 +139,9 @@ const ProductCompare = ({ productId }) => {
       </h2>
 
       {!prices.length ? (
-        <p className="text-center text-gray-500 text-lg">No price data available.</p>
+        <p className="text-center text-gray-500 text-lg">
+          No price data available.
+        </p>
       ) : (
         <>
           <label
@@ -152,7 +157,7 @@ const ProductCompare = ({ productId }) => {
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
             >
-              {prices.slice(0, -1).map(({ date }, index) => (
+              {prices.slice(0, -1).map(({date}, index) => (
                 <option key={date} value={date}>
                   {date}
                 </option>
@@ -183,25 +188,25 @@ const ProductCompare = ({ productId }) => {
           <ResponsiveContainer width="100%" height={350}>
             <BarChart
               data={prices}
-              margin={{ top: 15, right: 20, left: 0, bottom: 5 }}
+              margin={{top: 15, right: 20, left: 0, bottom: 5}}
               barCategoryGap="20%"
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 12, fill: "#4a5568" }}
-                padding={{ left: 10, right: 10 }}
+                tick={{fontSize: 12, fill: "#4a5568"}}
+                padding={{left: 10, right: 10}}
               />
               <YAxis
                 width={50}
-                tick={{ fontSize: 12, fill: "#4a5568" }}
+                tick={{fontSize: 12, fill: "#4a5568"}}
                 tickFormatter={(value) => `৳${value}`}
               />
               <Tooltip
                 formatter={(value) => `৳${value.toFixed(2)}`}
-                contentStyle={{ borderRadius: "8px", borderColor: "#c6f6d5" }}
+                contentStyle={{borderRadius: "8px", borderColor: "#c6f6d5"}}
               />
-              <Legend wrapperStyle={{ fontWeight: "bold", color: "#2f855a" }} />
+              <Legend wrapperStyle={{fontWeight: "bold", color: "#2f855a"}} />
               <Bar
                 dataKey="price"
                 radius={[8, 8, 0, 0]}

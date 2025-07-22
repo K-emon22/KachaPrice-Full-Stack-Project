@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../../ContextFiles/AuthContext";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-const ReviewSection = ({ productId, accessToken }) => {
-  const { user } = useContext(AuthContext);
+const ReviewSection = ({ productId }) => {
+  const { user,  accessToken} = useContext(AuthContext);
   const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState(null);
   const [rating, setRating] = useState(0);
@@ -14,17 +14,20 @@ const ReviewSection = ({ productId, accessToken }) => {
   const [loading, setLoading] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
 
+  const API = import.meta.env.VITE_API;
+
   const fetchReviews = async () => {
-    try {
-      const res = await axios.get(`http://localhost:3000/reviews/${productId}`);
-      setReviews(res.data);
-      if (user) {
-        const existing = res.data.find((rev) => rev.userEmail === user.email);
-        if (existing) setUserReview(existing);
-        else setUserReview(null);
-      }
-    } catch {
-      // Silent fail
+   try {
+    const res = await axios.get(`${API}/reviews/${productId}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    setReviews(res.data);
+    if (user) {
+      const existing = res.data.find((rev) => rev.userEmail === user.email);
+      setUserReview(existing || null);
+    }
+  }catch {
+      // silent fail
     }
   };
 
@@ -34,11 +37,11 @@ const ReviewSection = ({ productId, accessToken }) => {
     }
   }, [productId, user]);
 
-  const openUpdateModal = () => {
-    if (userReview) {
-      setSelectedReviewId(userReview._id);
-      setRating(userReview.rating);
-      setComment(userReview.comment);
+  const openUpdateModal = (review = null) => {
+    if (review) {
+      setSelectedReviewId(review._id);
+      setRating(review.rating);
+      setComment(review.comment);
     } else {
       setSelectedReviewId(null);
       setRating(0);
@@ -64,8 +67,8 @@ const ReviewSection = ({ productId, accessToken }) => {
     setLoading(true);
     try {
       const endpoint = selectedReviewId
-        ? `http://localhost:3000/reviews/${selectedReviewId}`
-        : "http://localhost:3000/reviews";
+        ? `${API}/reviews/${selectedReviewId}`
+        : `${API}/reviews`;
       const method = selectedReviewId ? "put" : "post";
 
       const res = await axios[method](endpoint, reviewData, {
@@ -77,6 +80,9 @@ const ReviewSection = ({ productId, accessToken }) => {
         setUserReview(res.data);
         await fetchReviews();
         document.getElementById("updateReviewModal").close();
+        setRating(0);
+        setComment("");
+        setSelectedReviewId(null);
       }
     } catch {
       toast.error("Could not submit review.");
@@ -97,7 +103,7 @@ const ReviewSection = ({ productId, accessToken }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await axios.delete(`http://localhost:3000/reviews/${reviewId}`, {
+          const res = await axios.delete(`${API}/reviews/${reviewId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
           if (res.status === 200) {
@@ -126,7 +132,7 @@ const ReviewSection = ({ productId, accessToken }) => {
             No reviews yet. Be the first to review.
           </p>
           {user && (
-            <button onClick={openUpdateModal} className="btn btn-primary">
+            <button onClick={() => openUpdateModal()} className="btn btn-primary">
               Add Review
             </button>
           )}
@@ -154,14 +160,14 @@ const ReviewSection = ({ productId, accessToken }) => {
               </div>
 
               <p className="text-yellow-500 text-lg mb-1">
-                {"⭐".repeat(rev.rating)}
+                {"⭐".repeat(rev.rating) || "No Rating"}
               </p>
               <p className="text-gray-700">{rev.comment}</p>
 
               {user && user.email === rev.userEmail && (
                 <div className="mt-4 flex gap-3">
                   <button
-                    onClick={openUpdateModal}
+                    onClick={() => openUpdateModal(rev)}
                     className="btn btn-sm h-10 btn-outline btn-success flex items-center gap-1"
                   >
                     <FaEdit /> Update
@@ -182,7 +188,7 @@ const ReviewSection = ({ productId, accessToken }) => {
       <dialog id="updateReviewModal" className="modal">
         <div className="modal-box w-full max-w-md">
           <h3 className="font-bold text-lg mb-4">
-            {userReview ? "Update Your Review" : "Add a Review"}
+            {selectedReviewId ? "Update Your Review" : "Add a Review"}
           </h3>
 
           <form onSubmit={handleReviewSubmit}>
@@ -219,14 +225,19 @@ const ReviewSection = ({ productId, accessToken }) => {
               <button type="submit" className="btn btn-primary" disabled={loading}>
                 {loading
                   ? "Submitting..."
-                  : userReview
+                  : selectedReviewId
                   ? "Update Review"
                   : "Submit Review"}
               </button>
               <button
                 type="button"
                 className="btn btn-outline btn-error h-[45px]"
-                onClick={() => document.getElementById("updateReviewModal").close()}
+                onClick={() => {
+                  setRating(0);
+                  setComment("");
+                  setSelectedReviewId(null);
+                  document.getElementById("updateReviewModal").close();
+                }}
               >
                 Cancel
               </button>

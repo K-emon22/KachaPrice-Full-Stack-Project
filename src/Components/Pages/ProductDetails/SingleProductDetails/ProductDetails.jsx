@@ -30,7 +30,7 @@ const ProductDetails = () => {
       setIsFetching(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/product/${id}`,
+          `${import.meta.env.VITE_API}/allProduct/approved/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -48,15 +48,17 @@ const ProductDetails = () => {
     const checkWishlist = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/wishlist/${user.email}`,
+          `${import.meta.env.VITE_API}/product/wishlist/${user.email}`,
           {
-            headers: {Authorization: `Bearer ${accessToken}`},
+            headers: {Authorization: `Bearer ${token}`},
           }
         );
         const wishlistItems = res.data || [];
         const found = wishlistItems.some((item) => item.productId === id);
         setIsWishlisted(found);
-      } catch {}
+      } catch (err) {
+        // optionally handle error
+      }
     };
 
     fetchProduct();
@@ -64,7 +66,7 @@ const ProductDetails = () => {
   }, [loading, user, id, token]);
 
   const handleWatchlist = async () => {
-    if (!user || !accessToken) {
+    if (!user || !token) {
       toast.error("You must be logged in.");
       return;
     }
@@ -72,10 +74,13 @@ const ProductDetails = () => {
     setAddingWatchlist(true);
     try {
       const res = await axios.post(
-        `http://localhost:3000/wishlist`,
-        {productId: product._id, userEmail: user.email},
+        `${import.meta.env.VITE_API}/product/wishlist`,
         {
-          headers: {Authorization: `Bearer ${accessToken}`},
+          productId: product._id,
+          userEmail: user.email,
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
         }
       );
       toast.success(res.data.message || "Added to watchlist!");
@@ -89,19 +94,17 @@ const ProductDetails = () => {
 
   if (isFetching) return <Loader />;
 
-  if (error) {
+  if (error)
     return (
       <p className="text-center mt-8 text-red-600 font-semibold">{error}</p>
     );
-  }
 
-  if (!product) {
+  if (!product)
     return (
       <p className="text-center mt-8 text-gray-600">
         No product data available.
       </p>
     );
-  }
 
   return (
     <div className="mx-[2%] lg:mx-[5%] min-h-screen text-gray-800">
@@ -132,7 +135,7 @@ const ProductDetails = () => {
                   {product.market || "N/A"}
                 </p>
                 <p>
-                  <span className="font-semibold">💰 Price: </span>{" "}
+                  <span className="font-semibold">💰 Price: </span>
                   <span className="text-green-600 font-bold">
                     {" "}
                     {product.price}{" "}
@@ -146,7 +149,9 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {product.vendor && (
+            {(product.vendorName ||
+              product.vendorEmail ||
+              product.vendorImage) && (
               <div className="mt-6 p-4 border rounded-xl bg-green-50">
                 <h3 className="text-xl font-semibold mb-2 text-green-700">
                   Vendor Info
@@ -154,23 +159,26 @@ const ProductDetails = () => {
                 <div className="flex items-center gap-4">
                   <img
                     src={
-                      product.vendor.image || "https://via.placeholder.com/64"
+                      product.vendorImage || "https://via.placeholder.com/64"
                     }
-                    alt={product.vendor.name}
+                    alt={product.vendorName || "Vendor"}
                     className="w-16 h-16 rounded-full object-cover"
                   />
                   <div>
-                    <p className="font-medium">{product.vendor.name}</p>
-                    <p className="text-gray-600">{product.vendor.email}</p>
+                    <p className="font-medium">
+                      {product.vendorName || "Unknown Vendor"}
+                    </p>
+                    <p className="text-gray-600">
+                      {product.vendorEmail || "No email"}
+                    </p>
                   </div>
                 </div>
               </div>
             )}
-
             <div className="flex flex-row justify-between mt-10">
               <Link
                 to={`/payment/${product._id}`}
-                className="btn  border-green-600 h-[45px] border-2 bg-white hover:bg-green-100 text-green-700 font-medium"
+                className="btn border-green-600 h-[45px] border-2 bg-white hover:bg-green-100 text-green-700 font-medium"
               >
                 Buy Now
               </Link>
@@ -197,7 +205,7 @@ const ProductDetails = () => {
       <div>
         <ProductCompare productId={product._id} />
       </div>
-      <ReviewSection productId={product._id} accessToken={accessToken} />
+      <ReviewSection productId={product._id} accessToken={token} />
     </div>
   );
 };

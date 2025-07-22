@@ -1,16 +1,16 @@
-import { Link, useNavigate, useLocation } from "react-router"; // use *react-router-dom*
-import { useContext, useEffect, useState } from "react";
-import { FaGoogle } from "react-icons/fa";
-import { useForm } from "react-hook-form";
-import { AuthContext } from "../../ContextFiles/AuthContext";
-import { updateProfile } from "firebase/auth";
-import { toast } from "react-toastify";
+import {Link, useNavigate, useLocation} from "react-router"; // use *react-router-dom*
+import {useContext, useEffect, useState} from "react";
+import {FaGoogle} from "react-icons/fa";
+import {useForm} from "react-hook-form";
+import {AuthContext} from "../../ContextFiles/AuthContext";
+import {updateProfile} from "firebase/auth";
+import {toast} from "react-toastify";
 import Loader from "../../Loader/Loader";
-import { Fade } from "react-awesome-reveal";
+import {Fade} from "react-awesome-reveal";
 import axios from "axios";
 
 const Register = () => {
-  const { googleLogin, createUser } = useContext(AuthContext);
+  const {googleLogin, createUser} = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -18,14 +18,14 @@ const Register = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [createdAt, setCreatedAt] = useState("");
-  const [userRole] = useState("user");
+  const userRole = "user";
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
     reset,
-  } = useForm({ mode: "onChange" });
+  } = useForm({mode: "onChange"});
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
@@ -39,6 +39,14 @@ const Register = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const saveUserToDatabase = async (userData) => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API}/allUser`, userData);
+    } catch (error) {
+      console.error("User save failed", error);
+    }
+  };
+
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
@@ -50,10 +58,9 @@ const Register = () => {
         photoURL: data.photo,
       });
 
-      const token = await user.getIdToken();
-      localStorage.setItem("accessToken", token);
+      // No token setting here
 
-      await axios.post("http://localhost:3000/users", {
+      await saveUserToDatabase({
         name: data.name,
         email: data.email,
         photoURL: data.photo,
@@ -62,14 +69,14 @@ const Register = () => {
       });
 
       reset();
-      navigate(from, { replace: true });
+      navigate(from, {replace: true});
     } catch (err) {
       const messages = {
         "auth/email-already-in-use": "Email is already in use.",
         "auth/invalid-email": "Invalid email address.",
       };
       toast.error(messages[err.code] || err.message || "Registration failed.", {
-        style: { background: "#fecaca" },
+        style: {background: "#fecaca"},
       });
     } finally {
       setSubmitting(false);
@@ -82,11 +89,10 @@ const Register = () => {
       const result = await googleLogin();
       const user = result.user;
 
-      const token = await user.getIdToken();
-      localStorage.setItem("accessToken", token);
+      // No token setting here
 
-      await axios.post("http://localhost:3000/users", {
-        name: user.displayName,
+      await saveUserToDatabase({
+        name: user.displayName || "Anonymous",
         email: user.email,
         photoURL: user.photoURL,
         createdAt: new Date().toLocaleDateString("en-GB", {
@@ -97,10 +103,10 @@ const Register = () => {
         role: userRole,
       });
 
-      navigate(from, { replace: true });
+      navigate(from, {replace: true});
     } catch {
       toast.error("Google login failed. Please try again.", {
-        style: { background: "#fecaca" },
+        style: {background: "#fecaca"},
       });
     } finally {
       setSubmitting(false);
@@ -213,7 +219,7 @@ const Register = () => {
             {submitting ? "Registering..." : "Register"}
           </button>
 
-          <p className="text-center text-black  mt-4">
+          <p className="text-center text-black mt-4">
             Already have an account?
             <Link
               to="/login"

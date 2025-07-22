@@ -1,15 +1,12 @@
-
-
-
-import { Link, useLocation, useNavigate } from "react-router";
-import { Typewriter } from "react-simple-typewriter";
-import { Fade } from "react-awesome-reveal";
-import { useContext, useEffect, useState } from "react";
-import { FaGoogle } from "react-icons/fa";
-import { useForm } from "react-hook-form";
-import { AuthContext } from "../../ContextFiles/AuthContext";
-import { toast } from "react-toastify";
+import {Link, useLocation, useNavigate} from "react-router";
+import {Fade} from "react-awesome-reveal";
+import {useContext, useEffect, useState} from "react";
+import {FaGoogle} from "react-icons/fa";
+import {useForm} from "react-hook-form";
+import {AuthContext} from "../../ContextFiles/AuthContext";
+import {toast} from "react-toastify";
 import Loader from "../../Loader/Loader";
+import axios from "axios";
 
 const Login = () => {
   const location = useLocation();
@@ -17,43 +14,54 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   const [loder, setLoder] = useState(true);
-  const { googleLogin, loginWithPass } = useContext(AuthContext);
+  const {googleLogin, loginWithPass} = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
     reset,
   } = useForm();
 
-  // ✅ Email/Password login with token saving
-  const onSubmit = async ({ email, password }) => {
+  const saveUserToDatabase = async (user) => {
+    const userInfo = {
+      name: user.displayName || "Anonymous",
+      email: user.email,
+      role: "user",
+    };
+    try {
+      await axios.post(`${import.meta.env.VITE_API}/allUser`, userInfo);
+    } catch (error) {
+      console.error("User save failed", error);
+    }
+  };
+
+  const onSubmit = async ({email, password}) => {
     try {
       const result = await loginWithPass(email, password);
       const user = result.user;
 
-      // ✅ Get Firebase token and store
-      const token = await user.getIdToken();
-      localStorage.setItem("accessToken", token);
+      // No token setting here
+
+      await saveUserToDatabase(user);
 
       reset();
-      navigate(from, { replace: true });
+      navigate(from, {replace: true});
     } catch (err) {
       toast.error(err.message || "Login failed.");
     }
   };
 
-  // ✅ Google login with token saving
   const loginWithGoogle = async () => {
     try {
       const result = await googleLogin();
       const user = result.user;
 
-      // ✅ Get Firebase token and store
-      const token = await user.getIdToken();
-      localStorage.setItem("accessToken", token);
+      // No token setting here
 
-      navigate(from, { replace: true });
+      await saveUserToDatabase(user);
+
+      navigate(from, {replace: true});
     } catch (err) {
       console.error(err);
       toast.error("Google login failed. Try again.");
