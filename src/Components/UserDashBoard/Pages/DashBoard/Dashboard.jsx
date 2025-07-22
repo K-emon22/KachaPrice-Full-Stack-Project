@@ -1,15 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  FaHeart,
-  FaStar,
-  FaShoppingCart,
-  FaEye,
-  FaWallet,
-} from "react-icons/fa";
-import { AuthContext } from "../../../ContextFiles/AuthContext";
+import React, {useEffect, useState, useContext} from "react";
+import {FaHeart, FaStar, FaShoppingCart, FaEye, FaWallet} from "react-icons/fa";
+import {AuthContext} from "../../../ContextFiles/AuthContext";
 import axios from "axios";
-import { Link } from "react-router";
-import { motion } from "framer-motion";
+import {Link} from "react-router";
+import {motion} from "framer-motion";
+import Profile from "../Profile/Profile";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -25,16 +20,16 @@ const floatAnimation = {
 const cardHover = {
   scale: 1.05,
   boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
-  transition: { duration: 0.3 },
+  transition: {duration: 0.3},
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  initial: {opacity: 0, y: 20},
+  animate: {opacity: 1, y: 0, transition: {duration: 0.6}},
 };
 
 const Dashboard = () => {
-  const { user, accessToken } = useContext(AuthContext);
+  const {user, accessToken} = useContext(AuthContext);
 
   const [wishlistCount, setWishlistCount] = useState(0);
   const [ordersCount, setOrdersCount] = useState(0);
@@ -45,7 +40,7 @@ const Dashboard = () => {
   const getAuthConfig = (needAuth) => {
     if (needAuth && accessToken) {
       return {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {Authorization: `Bearer ${accessToken}`},
       };
     }
     return {};
@@ -102,6 +97,8 @@ const Dashboard = () => {
         </p>
       </div>
 
+      <Profile></Profile>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {/* Wishlist */}
@@ -133,7 +130,7 @@ const Dashboard = () => {
           <motion.div
             className="mx-auto mb-2 bg-indigo-100 p-2 rounded-full inline-block"
             animate={floatAnimation}
-            transition={{ ...floatAnimation.transition, delay: 0.3 }}
+            transition={{...floatAnimation.transition, delay: 0.3}}
           >
             <FaShoppingCart className="text-4xl text-indigo-500" />
           </motion.div>
@@ -155,7 +152,7 @@ const Dashboard = () => {
           <motion.div
             className="mx-auto mb-2 bg-yellow-100 p-2 rounded-full inline-block"
             animate={floatAnimation}
-            transition={{ ...floatAnimation.transition, delay: 0.6 }}
+            transition={{...floatAnimation.transition, delay: 0.6}}
           >
             <FaStar className="text-4xl text-yellow-500" />
           </motion.div>
@@ -177,7 +174,7 @@ const Dashboard = () => {
           <motion.div
             className="mx-auto mb-2 bg-blue-100 p-2 rounded-full inline-block"
             animate={floatAnimation}
-            transition={{ ...floatAnimation.transition, delay: 0.9 }}
+            transition={{...floatAnimation.transition, delay: 0.9}}
           >
             <FaEye className="text-4xl text-blue-500" />
           </motion.div>
@@ -193,7 +190,7 @@ const Dashboard = () => {
           <motion.div
             className="mx-auto mb-2 bg-green-100 p-2 rounded-full inline-block"
             animate={floatAnimation}
-            transition={{ ...floatAnimation.transition, delay: 1.2 }}
+            transition={{...floatAnimation.transition, delay: 1.2}}
           >
             <FaWallet className="text-4xl text-green-600" />
           </motion.div>
@@ -205,9 +202,9 @@ const Dashboard = () => {
       {/* Chart Placeholder */}
       <motion.div
         className="mt-10 text-center border rounded-xl p-6 bg-white shadow-md"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 1.5 }}
+        initial={{opacity: 0, y: 20}}
+        animate={{opacity: 1, y: 0}}
+        transition={{duration: 0.7, delay: 1.5}}
       >
         <h3 className="text-xl font-semibold mb-2 text-gray-700">
           Coming Soon: Purchase Insights
