@@ -1,4 +1,3 @@
-
 import React, {useContext, useState, useEffect} from "react";
 import {Link, NavLink, useNavigate} from "react-router";
 import {HiMenuAlt3} from "react-icons/hi";
@@ -18,7 +17,7 @@ const NavBAr = () => {
 
   const changeTheme = (theme) => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme); 
+    localStorage.setItem("theme", theme);
     setCurrentTheme(theme);
   };
 
