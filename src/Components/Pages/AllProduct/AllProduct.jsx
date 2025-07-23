@@ -1,23 +1,20 @@
+
 import axios from "axios";
-import React, {useEffect, useState, useRef} from "react";
-import {Link} from "react-router"; // ✅ FIXED: Correct import for client-side routing
-import {motion, AnimatePresence} from "framer-motion";
-import {FaSearch} from "react-icons/fa";
-import {IoClose} from "react-icons/io5";
-import {toast} from "react-toastify";
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaSearch, FaArrowRight } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 // ✅ Refined Skeleton Loader Component
 const ProductCardSkeleton = () => (
-  <div className="bg-white rounded-2xl shadow-sm overflow-hidden animate-pulse">
-    <div className="bg-slate-200 h-48 w-full"></div>
-    <div className="p-5 space-y-3">
+  <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
+    <div className="bg-slate-200 h-52 w-full"></div>
+    <div className="p-5 space-y-4">
       <div className="h-5 bg-slate-200 rounded w-3/4"></div>
       <div className="h-4 bg-slate-200 rounded w-1/2"></div>
       <div className="h-3 bg-slate-200 rounded w-1/3"></div>
-      <div className="space-y-2 pt-2">
-        <div className="h-2.5 bg-slate-200 rounded"></div>
-        <div className="h-2.5 bg-slate-200 rounded"></div>
-      </div>
       <div className="flex justify-between items-center pt-3">
         <div className="h-4 bg-slate-200 rounded w-1/4"></div>
         <div className="h-10 bg-slate-200 rounded-full w-28"></div>
@@ -33,8 +30,6 @@ const AllProduct = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(true);
-
-  console.log(allVeg);
 
   // Pagination states
   const [page, setPage] = useState(1);
@@ -59,16 +54,10 @@ const AllProduct = () => {
     setToDate(formatDate(to));
   }, []);
 
-  // ✅ This effect ensures a smooth scroll to the top when the page changes
+  // This effect ensures a smooth scroll to the top when the page changes
   useEffect(() => {
-    window.scrollTo({top: 0, behavior: "smooth"});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
-
-  const scroll = () => {
-    useEffect(() => {
-      window.scrollTo({top: 0, behavior: "smooth"});
-    }, [page]);
-  };
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -123,9 +112,9 @@ const AllProduct = () => {
   return (
     <div className="mx-[2%] lg:mx-[5%] text-black min-h-screen pb-12">
       <motion.h1
-        initial={{opacity: 0, y: -20}}
-        animate={{opacity: 1, y: 0}}
-        transition={{duration: 0.6}}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         className="text-4xl font-bold mt-16 mb-10 text-center text-green-600"
       >
         🛒 Explore Fresh Market Products
@@ -166,7 +155,7 @@ const AllProduct = () => {
 
         <div className="w-full">
           <div className="flex items-center justify-between px-3 py-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-300 shadow-md focus-within:ring-2 focus-within:ring-green-600 transition-all">
-            <div className="w-1/2 pr-1">
+            <div className="w-1/2">
               <input
                 type="date"
                 value={fromDate}
@@ -182,8 +171,8 @@ const AllProduct = () => {
                 className="w-full text-sm text-gray-700 focus:outline-none bg-transparent"
               />
             </div>
-            <span className="mx-2 text-gray-400 text-sm select-none">to</span>
-            <div className="w-1/2 pl-1">
+            <span className="mx-2 text-gray-400 text-sm select-none">-</span>
+            <div className="w-1/2 ">
               <input
                 type="date"
                 value={toDate}
@@ -218,16 +207,16 @@ const AllProduct = () => {
         </div>
       </div>
 
+
       <div className="relative mt-8">
-        {/* Conditional rendering for Skeleton vs. Products vs. No Found */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {Array.from({length: 8}).map((_, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {Array.from({ length: 6 }).map((_, index) => (
               <ProductCardSkeleton key={index} />
             ))}
           </div>
         ) : allVeg.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 xl:grid-cols-4 gap-8">
             {allVeg.map((veg, index) => {
               const displayDate = veg.createdAt
                 ? new Date(veg.createdAt)
@@ -241,57 +230,63 @@ const AllProduct = () => {
               return (
                 <motion.div
                   key={veg._id}
-                  initial={{opacity: 0, y: 30}}
-                  whileInView={{opacity: 1, y: 0}}
-                  transition={{delay: index * 0.05, duration: 0.4}}
-                  viewport={{once: false, amount: 0.2}}
-                  className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.5, ease: "easeOut" }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col group overflow-hidden"
                 >
-                  <div className="relative overflow-hidden rounded-t-2xl h-48 group bg-slate-100">
+                  <div className="relative overflow-hidden h-52">
                     <img
                       src={
                         veg.image ||
                         "https://placehold.co/400x300/e2e8f0/64748b?text=No+Image"
                       }
-                      alt={veg.name || "Product Image"}
+                      alt={veg.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <p className="absolute bottom-3 left-4 text-white text-lg font-bold">
+                      {veg.market}
+                    </p>
                   </div>
 
                   <div className="p-5 flex flex-col justify-between flex-grow">
-                    <div className="space-y-1">
-                      <h2 className="text-lg font-semibold text-gray-900 line-clamp-1">
-                        {veg.name || "Unnamed Product"}
-                      </h2>
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">
-                          ৳
-                          <span className="text-green-600 font-semibold">
-                            {latestPrice}
-                          </span>
-                        </span>{" "}
-                        • {veg.market || "Unknown Market"}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {displayDate.toLocaleDateString()}
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold text-slate-800 line-clamp-1">
+                        {veg.name}
+                      </h3>
+                      <p className="text-sm text-slate-500">
+                        Listed on {displayDate.toLocaleDateString()}
                       </p>
                       <p
-                        className="text-gray-700 text-sm line-clamp-2 mt-2"
+                        className="text-slate-600 text-sm line-clamp-2 pt-1 text-justify"
                         title={veg.description}
                       >
-                        {veg.description || "No description available."}
+                        {veg.description}
+                      </p>
+                      <p className="text-sm text-slate-500 pt-2">
+                        Sold by:{" "}
+                        <span className="font-semibold text-slate-700">
+                          {veg.vendorName || "Unknown Vendor"}
+                        </span>
                       </p>
                     </div>
 
-                    <div className="mt-4 flex justify-between items-center">
-                      <div>
-                        <p className="text-gray-800 font-medium">
-                          {veg.vendorName || "Unknown Vendor"}
+                    <div className="mt-5 flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <p className="text-sm text-slate-500">Price</p>
+                        <p className="text-2xl font-extrabold text-green-600">
+                          ৳{latestPrice}
                         </p>
                       </div>
-                      <Link to={`/product/${veg._id}`} className="btn-primary">
-                        See More
+                      <Link
+                        to={`/product/${veg._id}`}
+                        className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 transform group-hover:scale-105 group-hover:bg-green-700 transition-all duration-300"
+                      >
+                        Details{" "}
+                        <FaArrowRight className="transition-transform group-hover:translate-x-1" />
                       </Link>
                     </div>
                   </div>
@@ -301,9 +296,9 @@ const AllProduct = () => {
           </div>
         ) : (
           <motion.div
-            initial={{opacity: 0, scale: 0.8}}
-            animate={{opacity: 1, scale: 1}}
-            transition={{duration: 0.6, ease: "easeOut"}}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex flex-col items-center justify-center mt-20 text-center text-gray-500"
           >
             <svg
@@ -340,7 +335,7 @@ const AllProduct = () => {
           >
             Prev
           </button>
-          {Array.from({length: totalPages}, (_, i) => i + 1).map((p) => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <button
               key={p}
               onClick={() => setPage(p)}

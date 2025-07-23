@@ -9,17 +9,17 @@ import Swal from "sweetalert2";
 const NavBAr = () => {
   const [currentTheme, setCurrentTheme] = useState("light");
 
-  useEffect(() => {
-    const saved = localStorage.getItem("theme") || "light";
-    document.documentElement.setAttribute("data-theme", saved);
-    setCurrentTheme(saved);
-  }, []);
+  // useEffect(() => {
+  //   const saved = localStorage.getItem("theme") || "light";
+  //   document.documentElement.setAttribute("data-theme", saved);
+  //   setCurrentTheme(saved);
+  // }, []);
 
-  const changeTheme = (theme) => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-    setCurrentTheme(theme);
-  };
+  // const changeTheme = (theme) => {
+  //   document.documentElement.setAttribute("data-theme", theme);
+  //   localStorage.setItem("theme", theme);
+  //   setCurrentTheme(theme);
+  // };
 
   const {user, loading} = useContext(AuthContext);
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const NavBAr = () => {
       {[
         {path: "/", name: "Home"},
         {path: "/allproduct", name: "All Product"},
-        {path: "/profile", name: "Profile"},
+
         {path: "/beAVendor", name: "Be A Vendor"},
         {path: "/dashboard", name: "Dashboard"},
       ].map(({path, name}) => (
@@ -71,10 +71,15 @@ const NavBAr = () => {
   );
 
   const button = (
-    <Link to={"/login"}>
-      <button className="btnn">Login</button>
+  <>
+    <Link to="/login">
+      <button className="btn-primary !p-0 !px-4 !rounded-lg">Login</button>
     </Link>
-  );
+    <Link to="/register">
+      <button className="btn-primary !p-0 !px-4 !rounded-lg">Register</button>
+    </Link>
+  </>
+);
 
   return (
     <div className="sticky top-0 z-50 backdrop-blur-sm bg-green-600/30">
@@ -83,7 +88,7 @@ const NavBAr = () => {
           <div className="flex justify-center items-center">
             <img
               className="h-12 w-20 text-black"
-              src="kachadam.png"
+              src="https://i.ibb.co/rGgpvbhM/Screenshot-2025-07-21-at-4-48-07-PM-removebg-preview.png"
               alt="Logo"
             />
           </div>
@@ -97,12 +102,12 @@ const NavBAr = () => {
 
         <div className="[@media(min-width:850px)]:hidden my-auto">
           <h1 className="my-auto font-bold hidden sm:block text-3xl ">
-            𝙺𝚊𝚌𝚑𝚊𝙳𝚊𝚖
+            𝙺𝚊𝚌𝚑𝚊Price
           </h1>
         </div>
 
         <div className="flex flex-row gap-3 items-center mb-1">
-          <div className="hidden [@media(min-width:850px)]:block my-1">
+          {/* <div className="hidden [@media(min-width:850px)]:block my-1">
             <select
               value={currentTheme}
               onChange={(e) => changeTheme(e.target.value)}
@@ -115,7 +120,7 @@ const NavBAr = () => {
               <option value="luxury">💎</option>
               <option value="coffee">☕</option>
             </select>
-          </div>
+          </div> */}
 
           {loading ? (
             <span className="loading h-[50px] w-[40px] loading-ring my-auto"></span>
@@ -182,7 +187,7 @@ const NavBAr = () => {
                 <div className="flex flex-col font-semibold space-y-1">
                   {pages}
 
-                  <div className="mt-4">
+                  {/* <div className="mt-4">
                     <label className="text-sm font-semibold mb-1 block">
                       Theme:
                     </label>
@@ -198,7 +203,7 @@ const NavBAr = () => {
                       <option value="luxury">💎 Luxury</option>
                       <option value="coffee">☕ Coffee</option>
                     </select>
-                  </div>
+                  </div> */}
 
                   {user ? (
                     <div className="w-full">
@@ -233,7 +238,7 @@ const NavBAr = () => {
                   ) : (
                     <div className="w-full">
                       <hr className="mt-2" />
-                      <div className="flex justify-center items-center mt-5">
+                      <div className="  mt-5 flex justify-between">
                         {button}
                       </div>
                     </div>

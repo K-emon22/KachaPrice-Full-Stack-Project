@@ -7,17 +7,17 @@ const Footer = () => {
     <footer className="backdrop-blur-sm bg-green-600/30 text-black w-full pt-10">
       <div className=" grid grid-cols-1 md:grid-cols-3 gap-8  px-[2%] lg:px-[5%] ">
         {/* Logo and Name */}
-        <div className="flex flex-col  md:flex-row space-x-3">
+        <div className="flex flex-row space-x-3 ">
           {/* Logo Image */}
           <img
-            src="kachadam.png" // Replace with your logo path or URL
-            alt="KachaDam Logo"
-            className="w-20 h-12 object-contain"
+            src="https://i.ibb.co/rGgpvbhM/Screenshot-2025-07-21-at-4-48-07-PM-removebg-preview.png" // Replace with your logo path or URL
+            alt="KachaPrice Logo"
+            className="w-20 h-12 "
           />
 
           {/* Site Name and Tagline */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-1">𝙺𝚊𝚌𝚑𝚊𝙳𝚊𝚖</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-1"> 𝙺𝚊𝚌𝚑𝚊Price</h2>
             <p className="text-sm">Your daily local market price tracker</p>
           </div>
         </div>
@@ -60,8 +60,8 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <div className="bg-green-300 text-black font-semibold text-center py-4 text-sm">
-        © {new Date().getFullYear()} KachaDam. All rights reserved.
+      <div className="bg-green-300 text-black  text-center py-4 text-sm">
+        © {new Date().getFullYear()} KachaPrice. All rights reserved.
       </div>
     </footer>
   );

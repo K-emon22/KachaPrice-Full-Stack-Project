@@ -69,7 +69,7 @@ const Profile = () => {
         transition={{duration: 0.5, ease: "easeOut"}}
       >
         {/* Left: Profile Image */}
-        <div className="w-full  bg-slate-100 p-5 flex flex-col items-center justify-center space-y-4 border-b md:border-b-0 md:border-r border-slate-200">
+        <div className="w-full  bg-green-100 p-5 flex flex-col items-center justify-center space-y-4 border-b md:border-b-0 md:border-r border-slate-200">
           <div className="relative group w-40 h-40">
             <img
               src={photo}
@@ -91,7 +91,7 @@ const Profile = () => {
         </div>
 
         {/* Right: User Details */}
-        <div className="w-full p-5">
+        <div className="w-full p-5 xl:border-r-2 border-r-green-200 border-dashed">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold text-slate-700">
               Profile Details

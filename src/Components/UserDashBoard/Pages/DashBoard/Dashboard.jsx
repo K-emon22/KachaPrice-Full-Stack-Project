@@ -6,7 +6,7 @@ import {Link} from "react-router";
 import {motion} from "framer-motion";
 import Profile from "../Profile/Profile";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_API;
 
 const floatAnimation = {
   y: [0, -10, 0], // Move up 10px and back down
@@ -37,6 +37,10 @@ const Dashboard = () => {
   const [recentlyViewed, setRecentlyViewed] = useState(3); // Placeholder
   const [spendingSummary, setSpendingSummary] = useState(0);
 
+
+
+
+  
   const getAuthConfig = (needAuth) => {
     if (needAuth && accessToken) {
       return {
@@ -46,48 +50,46 @@ const Dashboard = () => {
     return {};
   };
 
+
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
+
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`${BASE_URL}/wishlist/${user.email}`, getAuthConfig(false))
+        .get(`${BASE_URL}/product/wishlist/${user.email}`, getAuthConfig(false))
         .then((res) => setWishlistCount(res.data.length))
         .catch((err) => console.error("Failed to fetch wishlist", err));
 
       axios
-        .get(`${BASE_URL}/payments/total-amount`, getAuthConfig(true))
+        .get(`${BASE_URL}/payments/user/${user.email}`, getAuthConfig(true))
         .then((res) => {
           setSpendingSummary(res.data.totalAmount || 0);
+          setOrdersCount(res.data.totalPayments || 0);
         })
         .catch((err) => {
-          console.error("Failed to fetch total amount", err);
+          console.error("Failed to fetch user payments", err);
           setSpendingSummary(0);
+          setOrdersCount(0);
         });
 
       axios
-        .get(`${BASE_URL}/payments`, getAuthConfig(true))
-        .then((res) => {
-          setOrdersCount(res.data.length);
-        })
-        .catch((err) => {
-          if (err.response?.status === 404) setOrdersCount(0);
-          else console.error("Failed to fetch orders", err);
-        });
+        .get(`${BASE_URL}/reviews/user/${user.email}`, getAuthConfig(true))
+        .then((res) => setRecentReviews(res.data.reviews || []))
+        .catch((err) => console.error("Failed to fetch user reviews", err));
     }
-
-    axios
-      .get(`${BASE_URL}/reviews`)
-      .then((res) => setRecentReviews(res.data))
-      .catch((err) => console.error("Failed to fetch reviews", err));
   }, [user, accessToken]);
 
   return (
     <motion.div
-      className="p-6 space-y-10 max-w-6xl mx-auto"
+      className="p-6 pt-0 lg:mt-26 space-y-10 max-w-6xl mx-auto"
       initial="initial"
       animate="animate"
       variants={fadeInUp}
     >
       {/* Welcome Text */}
+      
       <div className="text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-green-700">
           Welcome, {user?.displayName || "User"}!
@@ -100,7 +102,7 @@ const Dashboard = () => {
       <Profile></Profile>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
         {/* Wishlist */}
         <motion.div
           className="bg-white rounded-xl shadow p-6 text-center cursor-pointer"
@@ -158,16 +160,16 @@ const Dashboard = () => {
           </motion.div>
           <h2 className="text-xl font-semibold">My Reviews</h2>
           <p className="text-3xl font-bold">{recentReviews.length}</p>
-          <Link
+          {/* <Link
             to="/dashboard/reviews"
             className="mt-2 inline-block text-green-600 text-sm hover:underline"
           >
             Manage Reviews
-          </Link>
+          </Link> */}
         </motion.div>
 
         {/* Recently Viewed */}
-        <motion.div
+        {/* <motion.div
           className="bg-white rounded-xl shadow p-6 text-center cursor-pointer"
           whileHover={cardHover}
         >
@@ -180,7 +182,7 @@ const Dashboard = () => {
           </motion.div>
           <h2 className="text-xl font-semibold">Recently Viewed</h2>
           <p className="text-3xl font-bold">{recentlyViewed}</p>
-        </motion.div>
+        </motion.div> */}
 
         {/* Spending Summary */}
         <motion.div

@@ -16,6 +16,7 @@ import MyOrder from "../Components/UserDashBoard/Pages/MyOrder/MyOrder";
 import WishList from "../Components/UserDashBoard/Pages/WishList/WishList";
 import PriceTrend from "../Components/UserDashBoard/Pages/PriceTrend/PriceTrend";
 import Profile from "../Components/UserDashBoard/Pages/Profile/Profile";
+import BeAVendor from "../Components/Pages/BeAVendor/BeAVendor";
 
 export const Routes = createBrowserRouter([
   {
@@ -37,6 +38,15 @@ export const Routes = createBrowserRouter([
       {
         path: "/allproduct",
         element: <AllProduct></AllProduct>,
+      },
+      {
+        path: "/BeAVEndor",
+        element: (
+          <PrivateRoute>
+            {" "}
+            <BeAVendor></BeAVendor>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/product/:id",
@@ -74,10 +84,7 @@ export const Routes = createBrowserRouter([
         path: "/dashboard",
         element: <Dashboard />,
       },
-      {
-        path: "profile",
-        element: <Profile></Profile>,
-      },
+
       {
         path: "orders",
         element: <MyOrder></MyOrder>,
