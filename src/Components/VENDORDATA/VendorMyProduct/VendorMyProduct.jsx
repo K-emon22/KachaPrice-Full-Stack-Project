@@ -221,7 +221,7 @@ const VendorMyProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen pt-0 mt-16 p-4 sm:p-6 lg:p-8">
       <motion.div
         className="text-center mb-12"
         initial={{ opacity: 0, y: -20 }}

@@ -6,7 +6,6 @@ import {FaEye} from "react-icons/fa";
 import {Link} from "react-router";
 import {motion, AnimatePresence} from "framer-motion";
 
-
 const BASE_URL = import.meta.env.VITE_API;
 
 // --- Data Fetching Functions ---
@@ -45,8 +44,6 @@ const OrderItemSkeleton = () => (
 );
 
 const OrderItem = ({order, productData, index}) => {
-  
-
   const productName = productData?.name || order.productName || "N/A";
   const marketName = productData?.market || "N/A";
   const productImage =

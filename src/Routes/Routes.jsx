@@ -215,12 +215,15 @@ import VendorAdvertisement from "../Components/VENDORDATA/VendorAdvertisement/Ve
 
 // Admin
 import AdminRoute from "../Components/ADMINSITE/AdminRoute/AdminRoute";
-import AllUsers from "../Components/ADMINSITE/AllUsers/AllUsers";
-import AllProducts from "../Components/ADMINSITE/AllProducts/AllProducts";
+import AllUsers from "../Components/ADMINSITE/AllUsers/AllUsersForAdmin";
+import AllProducts from "../Components/ADMINSITE/AllProducts/AllProductsForAdmin";
 
 // Common User Route
 import CommonUserRoute from "../Components/COMMONUSERROUTE/CommonUserRoute";
 import VendorEditProduct from "../Components/VENDORDATA/VendorEditProduct/VendorEditProduct";
+import AllUsersForAdmin from "../Components/ADMINSITE/AllUsers/AllUsersForAdmin";
+import AllProductsForAdmin from "../Components/ADMINSITE/AllProducts/AllProductsForAdmin";
+import AllAdvertisementForAdmin from "../Components/ADMINSITE/AllAdvertisement/AllAdvertisementForAdmin";
 
 export const Routes = createBrowserRouter([
   {
@@ -366,6 +369,27 @@ export const Routes = createBrowserRouter([
       {
         path: "trends",
         element: <PriceTrend />,
+      },
+
+      {
+        path: "vendorMyProduct",
+        element: <VendorMyProduct> </VendorMyProduct>,
+      },
+      {
+        path: "advertisements",
+        element: <VendorAdvertisement></VendorAdvertisement>,
+      },
+      {
+        path: "manageusers",
+        element: <AllUsersForAdmin></AllUsersForAdmin>,
+      },
+      {
+        path: "allproducts",
+        element: <AllProductsForAdmin></AllProductsForAdmin>,
+      },
+      {
+        path: "allAdvertisement",
+        element: <AllAdvertisementForAdmin></AllAdvertisementForAdmin>,
       },
     ],
   },

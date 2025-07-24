@@ -316,7 +316,7 @@ const VendorAdvertisement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen mt-16  p-4 sm:p-6  pt-0 lg:p-8">
       <ToastContainer
         position="top-right"
         autoClose={3000}
