@@ -5,9 +5,14 @@ import {AuthContext} from "../ContextFiles/AuthContext";
 import {signOut} from "firebase/auth";
 import {Auth} from "../FirebaseAuth/FirebaseAuth";
 import Swal from "sweetalert2";
+import UserRoleCheck from "../RoleCheck/UserRoleCheck";
 
 const NavBAr = () => {
-  const [currentTheme, setCurrentTheme] = useState("light");
+  const {role, roleloading} = UserRoleCheck();
+
+  console.log(role);
+
+  // const [currentTheme, setCurrentTheme] = useState("light");
 
   // useEffect(() => {
   //   const saved = localStorage.getItem("theme") || "light";
@@ -38,14 +43,34 @@ const NavBAr = () => {
   const pages = (
     <>
       {[
-        {path: "/", name: "Home"},
-        {path: "/allproduct", name: "All Product"},
+        ...(!roleloading && role === "user"
+          ? [
+              {path: "/", name: "Home"},
+              {path: "/allproduct", name: "All Product"},
+              {path: "/beAVendor", name: "Be A Vendor"},
+              {path: "/dashboard", name: "Dashboard"},
+            ]
+          : []),
 
-        {path: "/beAVendor", name: "Be A Vendor"},
-        {path: "/dashboard", name: "Dashboard"},
+        ...(!roleloading && role === "vendor"
+          ? [
+              {path: "/vendorAddProduct", name: "Add Product"},
+              {path: "/vendorMyProduct", name: "My Product"},
+              {path: "/vendorAdvertisement", name: "Add Advertisement"},
+              {path: "/dashboard", name: "Dashboard"},
+            ]
+          : []),
+
+        ...(!roleloading && role === "admin"
+          ? [
+              {path: "/allUsers", name: "All Users"},
+              {path: "/allProducts", name: "All Product"},
+              {path: "/dashboard", name: "Dashboard"},
+            ]
+          : []),
       ].map(({path, name}) => (
         <NavLink
-          key={path}
+          key={path + name}
           to={path}
           className="relative px-2 py-1 font-semibold text-black overflow-hidden"
         >
@@ -71,15 +96,15 @@ const NavBAr = () => {
   );
 
   const button = (
-  <>
-    <Link to="/login">
-      <button className="btn-primary !p-0 !px-4 !rounded-lg">Login</button>
-    </Link>
-    <Link to="/register">
-      <button className="btn-primary !p-0 !px-4 !rounded-lg">Register</button>
-    </Link>
-  </>
-);
+    <>
+      <Link to="/login">
+        <button className="btn-primary !p-0 !px-4 !rounded-lg">Login</button>
+      </Link>
+      <Link to="/register">
+        <button className="btn-primary !p-0 !px-4 !rounded-lg">Register</button>
+      </Link>
+    </>
+  );
 
   return (
     <div className="sticky top-0 z-50 backdrop-blur-sm bg-green-600/30">

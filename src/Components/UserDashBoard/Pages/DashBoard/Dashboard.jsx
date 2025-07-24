@@ -83,7 +83,7 @@ useEffect(() => {
 
   return (
     <motion.div
-      className="p-6 pt-0 lg:mt-26 space-y-10 max-w-6xl mx-auto"
+      className="p-6 mt-16 pt-0 lg:mt-26 space-y-10 max-w-6xl mx-auto"
       initial="initial"
       animate="animate"
       variants={fadeInUp}

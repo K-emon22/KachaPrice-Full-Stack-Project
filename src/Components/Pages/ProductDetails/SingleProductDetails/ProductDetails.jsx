@@ -56,7 +56,7 @@ const ProductDetails = () => {
       setIsFetching(true);
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API}/allProduct/approved/${id}`,
+          `${import.meta.env.VITE_API}/allProduct/${id}`,
           { headers: { Authorization: `Bearer ${accessToken}` } }
         );
         setProduct(response.data);

@@ -15,7 +15,7 @@ import {FaArrowTrendUp, FaArrowTrendDown} from "react-icons/fa6";
 
 const PriceTrend = () => {
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({top: 0, behavior: "smooth"});
   }, []);
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -57,7 +57,7 @@ const PriceTrend = () => {
 
     axios
       .get(`${API}/allProduct/approved`, {
-        params: { from, to, page: 1, limit: 100 },
+        params: {from, to, page: 1, limit: 100},
       })
       .then((res) => {
         setProducts(res.data.products);
@@ -88,9 +88,9 @@ const PriceTrend = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="grid grid-cols-1 gap-6 p-4 sm:p-6 lg:p-8">
-        <main className="col-span-1  space-y-6">
+        <main className="col-span-1 space-y-6">
           <div className="sticky top-[102px] z-20 mb-10 lg:mb-5">
-            <div className="relative bg-white/40 backdrop-blur-xl border border-slate-200/50  rounded-xl shadow-lg p-3">
+            <div className="relative bg-white/40 backdrop-blur-xl border border-slate-200/50 rounded-xl shadow-lg p-3">
               <h3 className="text-sm font-bold text-slate-800 mb-1.5 text-center sm:text-left px-1">
                 Select Product
               </h3>
@@ -136,7 +136,7 @@ const PriceTrend = () => {
               <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : selectedProduct ? (
-            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 space-y-6">
+            <div className="bg-white rounded-xl xl:mt-25 mb-16 shadow-sm p-4 sm:p-6 space-y-6">
               <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between pb-6 border-b border-slate-100">
                 <div className="flex items-center gap-4">
                   <img
@@ -259,5 +259,4 @@ const PriceTrend = () => {
     </div>
   );
 };
-
 export default PriceTrend;

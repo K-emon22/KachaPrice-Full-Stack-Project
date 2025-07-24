@@ -10,7 +10,6 @@ import {motion, AnimatePresence} from "framer-motion";
 
 const BASE_URL = import.meta.env.VITE_API;
 
-// --- Data Fetching Functions ---
 const fetchWishlist = async (email, token) => {
   const {data} = await axios.get(`${BASE_URL}/product/wishlist/${email}`, {
     headers: {Authorization: `Bearer ${token}`},
@@ -108,6 +107,16 @@ const WishlistItem = ({item, productData, onRemove, isDeleting, index}) => {
               </span>
             </Link>
 
+            <Link
+              to={"/allproduct"}
+              className="text-white bg-green-600 hover:bg-green-700 px-3 py-2 rounded-full inline-flex items-center justify-center gap-2 transition transform hover:scale-105"
+            >
+              <FaPlus />
+              <span className="text-sm font-semibold hidden sm:inline">
+                Add more
+              </span>
+            </Link>
+
             <button
               onClick={onRemove}
               disabled={isDeleting}
@@ -119,7 +128,10 @@ const WishlistItem = ({item, productData, onRemove, isDeleting, index}) => {
               ) : (
                 <>
                   {" "}
-                  <FaTrash  /> <span className="text-sm font-semibold hidden sm:inline">Delete</span>
+                  <FaTrash />{" "}
+                  <span className="text-sm font-semibold hidden sm:inline">
+                    Delete
+                  </span>
                 </>
               )}
             </button>
@@ -247,8 +259,7 @@ const WishList = () => {
           </div>
         )}
 
-        {/* ✅ Added Button */}
-        {!isLoading && wishlist.length > 0 && (
+        {/* {!isLoading && wishlist.length > 0 && (
           <div className="flex justify-center items-center mt-10">
             <Link
               to={"/allproduct"}
@@ -257,7 +268,7 @@ const WishList = () => {
               <FaPlus /> Add More Products
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

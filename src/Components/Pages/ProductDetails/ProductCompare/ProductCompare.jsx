@@ -57,7 +57,7 @@ const ProductCompare = ({ productId }) => {
           return;
         }
         const res = await axios.get(
-          `${import.meta.env.VITE_API}/allProduct/approved/${productId}`,
+          `${import.meta.env.VITE_API}/allProduct/${productId}`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
