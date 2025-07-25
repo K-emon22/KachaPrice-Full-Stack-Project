@@ -15,7 +15,10 @@ import {motion, AnimatePresence} from "framer-motion";
 import {AuthContext} from "../../ContextFiles/AuthContext";
 import UserRoleCheck from "../../RoleCheck/UserRoleCheck";
 import {useMemo} from "react";
-
+import {MdAddShoppingCart} from "react-icons/md";
+import {MdCampaign} from "react-icons/md";
+import {VscDiffAdded} from "react-icons/vsc";
+import {RiAdvertisementLine} from "react-icons/ri";
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,11 +58,6 @@ const Dashboard = () => {
   const menuItems = useMemo(() => {
     const baseItems = [
       {
-        icon: <FaHome className="text-2xl transition" />,
-        title: "Home",
-        path: "/",
-      },
-      {
         icon: <MdOutlineDashboard className="text-2xl transition" />,
         title: "Dashboard",
         path: "/dashboard",
@@ -67,6 +65,11 @@ const Dashboard = () => {
     ];
 
     const userItems = [
+      {
+        icon: <FaHome className="text-2xl transition" />,
+        title: "Home",
+        path: "/",
+      },
       {
         icon: <FaShoppingCart className="text-2xl transition" />,
         title: "Orders",
@@ -91,9 +94,14 @@ const Dashboard = () => {
         path: "vendorMyProduct",
       },
       {
-        icon: <MdOutlineStorefront className="text-2xl transition" />,
-        title: "My Ads",
+        icon: <RiAdvertisementLine className="text-2xl transition" />,
+        title: "My advertisements",
         path: "advertisements",
+      },
+      {
+        icon: <VscDiffAdded size={24} />,
+        title: "Add Product",
+        path: "/vendorAddProduct",
       },
     ];
 
@@ -121,13 +129,28 @@ const Dashboard = () => {
     return [...baseItems, ...userItems];
   }, [role]);
 
+  // const logOut = () => {
+  //   logout() // this is from context
+  //     .then(() => {
+  //       localStorage.removeItem("accessToken");
+  //       navigate("/");
+  //     })
+  //     .catch((error) => console.error("Logout error:", error));
+  // };
+
   const logOut = () => {
-    logout() // this is from context
+    // 1. Navigate to the public homepage FIRST.
+    navigate("/");
+
+    // 2. THEN, sign the user out.
+    logout()
       .then(() => {
+        // This part runs after the user is already on the homepage.
         localStorage.removeItem("accessToken");
-        navigate("/");
       })
-      .catch((error) => console.error("Logout error:", error));
+      .catch((error) => {
+        console.error("Logout failed:", error);
+      });
   };
 
   const confirmLogout = () => {

@@ -42,8 +42,8 @@ const SortedSix = () => {
   };
 
   return (
-    <div className="bg-slate-50 py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="bg-slate-50 py-16 w-full px-[2%] lg:px-[5%] rounded-lg">
+      <div className=" ">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ const SortedSix = () => {
           
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-3tracking-tight">
             Fresh Picks from Our Markets
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-500">

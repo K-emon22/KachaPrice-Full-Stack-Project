@@ -46,10 +46,9 @@ const Dashboard = () => {
   const [spendingSummary, setSpendingSummary] = useState(0);
   const [vendorTotalProduct, setVendorTotalProduct] = useState([]);
   const [vendorTotalmoney, setVendorTotalmoney] = useState(0);
-const[vendorAds,setVendorAds]=useState([])
-console.log(vendorAds);
+  const [vendorAds, setVendorAds] = useState([]);
+  console.log(vendorAds);
 
-  
   const vendorWatingProduct = vendorTotalProduct.filter(
     (wait) => wait.status === "pending"
   ).length;
@@ -107,9 +106,11 @@ console.log(vendorAds);
         })
         .then((res) => setVendorTotalmoney(res.data));
 
-      axios.get(`${BASE_URL}/advertisements?vendorEmail=${user?.email}`, {
-        headers: {Authorization: `Bearer ${accessToken}`},
-      }).then(res=> setVendorAds(res.data))
+      axios
+        .get(`${BASE_URL}/advertisements?vendorEmail=${user?.email}`, {
+          headers: {Authorization: `Bearer ${accessToken}`},
+        })
+        .then((res) => setVendorAds(res.data));
     }
   }, [user, accessToken]);
 
@@ -214,7 +215,7 @@ console.log(vendorAds);
         {role === "vendor" && (
           <>
             <motion.div
-              className="bg-white rounded-xl shadow p-6 text-center cursor-pointer"
+              className="bg-white rounded-xl shadow p-6 text-center cursor-pointer flex flex-col"
               whileHover={cardHover}
             >
               <motion.div
@@ -227,14 +228,14 @@ console.log(vendorAds);
               <p className="text-3xl font-bold">{vendorTotalProduct.length}</p>
               <Link
                 to="/dashboard/vendorMyProduct"
-                className="mt-2 inline-block text-green-600 text-sm hover:underline"
+                className="mt-auto pt-4 text-green-600 text-sm hover:underline"
               >
-                View Products
+                View
               </Link>
             </motion.div>
 
             <motion.div
-              className="bg-white rounded-xl shadow p-6 text-center cursor-pointer"
+              className="bg-white rounded-xl shadow p-6 text-center cursor-pointer flex flex-col"
               whileHover={cardHover}
             >
               <motion.div
@@ -248,14 +249,14 @@ console.log(vendorAds);
               <p className="text-3xl font-bold">{vendorWatingProduct}</p>
               <Link
                 to="/dashboard/vendorMyProduct"
-                className="mt-2 inline-block text-green-600 text-sm hover:underline"
+                className="mt-auto pt-4 text-green-600 text-sm hover:underline"
               >
-                View Pending
+                View
               </Link>
             </motion.div>
 
             <motion.div
-              className="bg-white rounded-xl shadow p-6 text-center cursor-pointer"
+              className="bg-white rounded-xl shadow p-6 text-center cursor-pointer flex flex-col"
               whileHover={cardHover}
             >
               <motion.div
@@ -269,7 +270,7 @@ console.log(vendorAds);
               <p className="text-3xl font-bold">{vendorAds.length}</p>
               <Link
                 to="advertisements"
-                className="mt-2 inline-block text-green-600 text-sm hover:underline"
+                className="mt-auto pt-4 text-green-600 text-sm hover:underline"
               >
                 Manage Ads
               </Link>

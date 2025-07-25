@@ -31,9 +31,9 @@ const newsArticles = [
 
 const NewsSection = () => {
   return (
-    <div className="my-16 px-[2%] lg:px-[5%] overflow-hidden">
+    <div className="mb-16 px-[2%] lg:px-[5%] overflow-hidden">
       <Fade cascade damping={0.1}>
-        <h2 className="text-3xl font-bold text-green-600 text-center mb-10">
+        <h2 className=" mb-10 text-4xl md:text-5xl font-extrabold text-slate-800 text-center">
           📰 Vegetable Market News
         </h2>
       </Fade>

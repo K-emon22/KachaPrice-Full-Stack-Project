@@ -566,13 +566,13 @@ const Sidebar = ({isOpen, setIsOpen, pages, user, handleLogout, button}) => {
             onClick={() => setIsOpen(false)}
           />
           <motion.div
-            className="fixed top-0 right-0 h-full w-72 bg-white shadow-xl z-50 flex flex-col p-6 pt-2"
+            className="fixed top-0 right-0 h-full w-72 bg-white shadow-xl z-50 flex flex-col p-6 pt-0"
             initial={{x: "100%"}}
             animate={{x: 0}}
             exit={{x: "100%"}}
             transition={{type: "spring", stiffness: 300, damping: 30}}
           >
-            <div className="flex justify-between items-center mb-8 ">
+            <div className="flex justify-between items-center mb-8  border-b-2 pb-2">
               <img
                 className="h-12 w-20"
                 src="https://i.ibb.co/rGgpvbhM/Screenshot-2025-07-21-at-4-48-07-PM-removebg-preview.png"
@@ -585,10 +585,14 @@ const Sidebar = ({isOpen, setIsOpen, pages, user, handleLogout, button}) => {
                 <HiX size={35} />
               </button>
             </div>
-            <div className="flex flex-col gap-4 text-lg">{pages}</div>
+
+            <div className="flex flex-col gap-4 text-lg ">{pages}</div>
             <div className="mt-auto pt-6 border-t">
               {user ? (
-                <button onClick={handleLogout} className="btnnnnn w-full">
+                <button
+                  onClick={handleLogout}
+                  className="btn bg-red-500 rounded-lg text-white font-bold text-lg w-full"
+                >
                   Logout
                 </button>
               ) : (
@@ -603,7 +607,7 @@ const Sidebar = ({isOpen, setIsOpen, pages, user, handleLogout, button}) => {
 };
 
 const NavBAr = () => {
-  const {role, roleloading} = UserRoleCheck();
+  const {role, roleLoading} = UserRoleCheck();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   console.log(role);
@@ -661,7 +665,7 @@ const NavBAr = () => {
   const pages = (
     <>
       {[
-        ...(!roleloading && (role === "user" || role === "guest" || !role)
+        ...(!roleLoading && (role === "user" || role === "guest" || !role)
           ? [
               {path: "/", name: "Home"},
               {path: "/allproduct", name: "All Product"},
@@ -670,7 +674,7 @@ const NavBAr = () => {
             ]
           : []),
 
-        ...(!roleloading && role === "vendor"
+        ...(!roleLoading && role === "vendor"
           ? [
               {path: "/vendorAddProduct", name: "Add Product"},
               {path: "/vendorMyProduct", name: "My Product"},
@@ -679,7 +683,7 @@ const NavBAr = () => {
             ]
           : []),
 
-        ...(!roleloading && role === "admin"
+        ...(!roleLoading && role === "admin"
           ? [
               {path: "/allUsers", name: "All Users"},
               {path: "/allProducts", name: "All Product"},
@@ -696,13 +700,13 @@ const NavBAr = () => {
           {({isActive}) => (
             <>
               <span
-                className={`absolute inset-0 bg-green-600 z-0 transition-transform duration-500 ease-in-out ${
-                  isActive ? "scale-x-100" : "scale-x-0"
+                className={`absolute inset-0 border-b-4 border-l-2 border-r-5 border-t-1 bg-gradient-to-br from-green-500 to-emerald-600 border-green-950 z-0 transition-transform duration-500 ease-in-out ${
+                  isActive ? "scale-x-100  " : "scale-x-0"
                 } origin-left rounded-lg`}
               />
               <span
                 className={`relative z-10 ${
-                  isActive ? "text-white" : "text-black"
+                  isActive ? "text-white  " : "text-black"
                 }`}
               >
                 {name}
@@ -717,7 +721,7 @@ const NavBAr = () => {
   const button = (
     <>
       <Link to="/login">
-        <button className="btn-primary !p-0 !px-4 !rounded-lg w-full text-center">
+        <button className="btn-primary  !p-0 !px-4 !rounded-lg w-full text-center">
           Login
         </button>
       </Link>
@@ -731,7 +735,7 @@ const NavBAr = () => {
 
   return (
     <>
-      <div className="sticky top-0 z-40 backdrop-blur-sm bg-green-600/30">
+      <div className="sticky top-0 z-40 backdrop-blur-sm bg-gradient-to-br from-green-500 to-emerald-600">
         <nav className="flex flex-row justify-between pt-1 px-[2%] lg:px-[5%] border-b">
           <div className="flex justify-between gap-2 mb-1">
             <div className="flex justify-center items-center">
@@ -763,25 +767,31 @@ const NavBAr = () => {
                 <div tabIndex={0} role="button">
                   <img
                     className="h-10 my-auto rounded-full"
-                    src={user?.photoURL}
-                    alt=""
+                    src={
+                      user?.photoURL ||
+                      "https://i.ibb.co/pjWdS54Z/1-spider-man-no-way-home-poster.webp"
+                    }
+                    alt={user?.displayName || "User"}
                     referrerPolicy="no-referrer"
                   />
                 </div>
                 <ul
                   tabIndex={0}
-                  className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mt-3 border-2"
+                  className="dropdown-content menu backdrop-blur-2xl bg-white/92 rounded-sm rounded-box z-1 w-52 p-2 shadow-sm mt-3 border-2"
                 >
-                  <li className="font-bold mb-5 text-center mt-3">
+                  <li className="font-bold mb-5 text-center mt-3 text-xl">
                     {user?.displayName || "User"}
                   </li>
-                  <button onClick={handleLogout} className="btnnnnn">
+                  <button
+                    onClick={handleLogout}
+                    className="btn bg-red-500   rounded-lg text-white font-bold text-lg w-full"
+                  >
                     Logout
                   </button>
                 </ul>
               </div>
             ) : (
-              <div className="space-x-3 hidden lg:flex pb-1">{button}</div>
+              <div className="space-x-3 hidden lg:flex  ">{button}</div>
             )}
 
             <div className="lg:hidden my-auto">

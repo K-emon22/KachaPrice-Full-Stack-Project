@@ -11,27 +11,24 @@ const BeAVendor = () => {
   const [name, setName] = useState(user?.displayName || "");
   const [email, setEmail] = useState(user?.email || "");
 
-
   useEffect(() => {
     if (!email) return;
 
     const checkVendorRequest = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API}/allUser/email?email=${email}`,
+          `${import.meta.env.VITE_API}/user/vendor-request?email=${email}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-        if (res.data.vendorRequest === true) {
-          setAlreadyRequested(true);
-        } else {
-          setAlreadyRequested(false);
-        }
+
+        setAlreadyRequested(res.data?.vendorRequest === true);
       } catch (error) {
         console.error("Error checking vendor request:", error);
+        setAlreadyRequested(false); // fallback
       }
     };
 
@@ -53,7 +50,7 @@ const BeAVendor = () => {
     setLoading(true);
     try {
       await axios.patch(
-        `${import.meta.env.VITE_API}/allUser/vendorRequest?email=${email}`,
+        `${import.meta.env.VITE_API}/users/vendor-request?email=${email}`,
         {vendorRequest: true},
         {
           headers: {
@@ -77,7 +74,7 @@ const BeAVendor = () => {
         initial={{opacity: 0, y: 20}}
         animate={{opacity: 1, y: 0}}
         transition={{duration: 0.6, ease: "easeOut"}}
-        className="max-w-lg  bg-white rounded-2xl shadow-lg p-8 mt-16 mb-16 border border-green-300"
+        className="max-w-lg bg-white rounded-2xl shadow-lg p-8 mt-16 mb-16 border border-green-300"
         aria-labelledby="be-a-vendor-title"
         role="form"
       >
@@ -112,7 +109,6 @@ const BeAVendor = () => {
             required
             autoComplete="name"
             aria-required="true"
-            aria-describedby="nameHelp"
           />
 
           <label
@@ -130,10 +126,8 @@ const BeAVendor = () => {
             className="w-full mb-8 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 transition duration-300"
             required
             autoComplete="email"
-            aria-required="true"
             disabled={!!user?.email}
             aria-disabled={!!user?.email}
-            aria-describedby="emailHelp"
           />
 
           <motion.button
@@ -147,7 +141,6 @@ const BeAVendor = () => {
                 : "bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-400"
             }`}
             aria-disabled={loading || alreadyRequested}
-            aria-live="polite"
           >
             {alreadyRequested
               ? "Already Requested"

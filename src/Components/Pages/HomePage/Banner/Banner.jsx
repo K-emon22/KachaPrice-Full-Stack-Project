@@ -36,9 +36,9 @@ const slides = [
 
 const Banner = () => {
   return (
-    <div className="overflow-hidden px-[1%] rounded-lg">
+    <div className="overflow-hidden px-[1%] mt-10 rounded-lg">
       {" "}
-      {/* Prevent horizontal scroll */}
+
       <Swiper
         modules={[Autoplay, Navigation, Pagination]}
         navigation
