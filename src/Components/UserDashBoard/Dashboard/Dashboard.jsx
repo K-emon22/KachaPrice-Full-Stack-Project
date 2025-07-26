@@ -24,38 +24,16 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const {logout} = useContext(AuthContext);
-  const {role, roleloading} = UserRoleCheck();
-
-  // const menuItems = [
-  //   {
-  //     icon: <FaHome className="text-2xl transition" />,
-  //     title: "Home",
-  //     path: "/",
-  //   },
-  //   {
-  //     icon: <MdOutlineDashboard className="text-2xl transition" />,
-  //     title: "Dashboard",
-  //     path: "/dashboard",
-  //   },
-
-  //   {
-  //     icon: <FaShoppingCart className="text-2xl transition" />,
-  //     title: "orders",
-  //     path: "orders",
-  //   },
-  //   {
-  //     icon: <MdOutlineWatchLater className="text-2xl transition" />,
-  //     title: "watchlist",
-  //     path: "watchlist",
-  //   },
-  //   {
-  //     icon: <FaChartBar className="text-2xl transition" />,
-  //     title: "Price Trends",
-  //     path: "trends",
-  //   },
-  // ];
-
+  const {role, roleLoading} = UserRoleCheck();
+  const MenuItemSkeleton = () => (
+    <li className="flex items-center gap-4 px-3 py-2 w-full animate-pulse">
+      <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+      <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+    </li>
+  );
   const menuItems = useMemo(() => {
+    if (roleLoading) return [];
+
     const baseItems = [
       {
         icon: <MdOutlineDashboard className="text-2xl transition" />,
@@ -127,7 +105,7 @@ const Dashboard = () => {
     if (role === "admin") return [...baseItems, ...adminItems];
     if (role === "vendor") return [...baseItems, ...vendorItems];
     return [...baseItems, ...userItems];
-  }, [role]);
+  }, [role, roleLoading]);
 
   // const logOut = () => {
   //   logout() // this is from context
@@ -140,17 +118,7 @@ const Dashboard = () => {
 
   const logOut = () => {
     // 1. Navigate to the public homepage FIRST.
-    navigate("/");
-
-    // 2. THEN, sign the user out.
-    logout()
-      .then(() => {
-        // This part runs after the user is already on the homepage.
-        localStorage.removeItem("accessToken");
-      })
-      .catch((error) => {
-        console.error("Logout failed:", error);
-      });
+    navigate("/logOut");
   };
 
   const confirmLogout = () => {
@@ -201,45 +169,56 @@ const Dashboard = () => {
 
           {/* Menu List - No Scroll */}
           <ul className="flex-1 flex flex-col gap-3 px-4 py-6 text-sm">
-            {menuItems.map(({icon, title, path}, idx) => {
-              const active = isActive(path);
-              return (
-                <motion.li
-                  key={idx}
-                  initial={{opacity: 0, x: -20}}
-                  animate={{opacity: 1, x: 0}}
-                  transition={{duration: 0.3, delay: idx * 0.05}}
-                  className={`group rounded-md transition ${
-                    active
-                      ? "bg-green-600 animated-sea-green text-white font-semibold shadow-[inset_5px_0_6px_-4px_rgba(0,0,0,0.4),_inset_-5px_0_6px_-4px_rgba(0,0,0,0.4)]"
-                      : "text-black hover:bg-green-400 hover:text-white font-semibold"
-                  }`}
-                >
-                  <Link
-                    to={path}
-                    className="flex items-center gap-4 px-3 py-2 w-full"
+            {roleLoading ? (
+              <>
+                <MenuItemSkeleton />
+                <MenuItemSkeleton />
+                <MenuItemSkeleton />
+                <MenuItemSkeleton />
+              </>
+            ) : (
+              menuItems.map(({icon, title, path}, idx) => {
+                const active = isActive(path);
+                return (
+                  <motion.li
+                    key={idx}
+                    initial={{opacity: 0, x: -20}}
+                    animate={{opacity: 1, x: 0}}
+                    transition={{duration: 0.3, delay: idx * 0.05}}
+                    className={`group rounded-md transition ${
+                      active
+                        ? "bg-green-600 animated-sea-green text-white font-semibold shadow-[inset_5px_0_6px_-4px_rgba(0,0,0,0.4),_inset_-5px_0_6px_-4px_rgba(0,0,0,0.4)]"
+                        : "text-black hover:bg-green-400 hover:text-white font-semibold"
+                    }`}
                   >
-                    {React.cloneElement(icon, {
-                      className: "text-2xl transition group-hover:text-white",
-                    })}
-                    <span>{title}</span>
-                  </Link>
-                </motion.li>
-              );
-            })}
+                    <Link
+                      to={path}
+                      className="flex items-center gap-4 px-3 py-2 w-full"
+                    >
+                      {React.cloneElement(icon, {
+                        className: "text-2xl transition group-hover:text-white",
+                      })}
+                      <span>{title}</span>
+                    </Link>
+                  </motion.li>
+                );
+              })
+            )}
 
             {/* Logout Button */}
-            <motion.li
-              onClick={confirmLogout}
-              role="button"
-              initial={{opacity: 0, x: -20}}
-              animate={{opacity: 1, x: 0}}
-              transition={{duration: 0.3, delay: menuItems.length * 0.05}}
-              className="group flex items-center gap-4 cursor-pointer text-red-500 hover:text-white hover:bg-red-500 px-3 py-2 rounded-md font-semibold transition"
-            >
-              <FaSignOutAlt className="text-xl transition group-hover:text-white" />
-              <span>Logout</span>
-            </motion.li>
+            {!roleLoading && (
+              <motion.li
+                onClick={confirmLogout}
+                role="button"
+                initial={{opacity: 0, x: -20}}
+                animate={{opacity: 1, x: 0}}
+                transition={{duration: 0.3, delay: menuItems.length * 0.05}}
+                className="group flex items-center gap-4 cursor-pointer text-red-500 hover:text-white hover:bg-red-500 px-3 py-2 rounded-md font-semibold transition mt-auto"
+              >
+                <FaSignOutAlt className="text-xl transition group-hover:text-white" />
+                <span>Logout</span>
+              </motion.li>
+            )}
           </ul>
         </nav>
 

@@ -96,7 +96,7 @@ const UserHomepage = () => {
 
 const Home = () => {
   const {user, loading: authLoading} = useContext(AuthContext);
-  const {role, roleloading} = UserRoleCheck();
+  const {role, roleLoading} = UserRoleCheck();
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -105,7 +105,7 @@ const Home = () => {
     window.scrollTo({top: 0, behavior: "smooth"});
   }, []);
 
-  if (authLoading || roleloading) {
+  if (authLoading || roleLoading) {
     return <Loader />;
   }
 

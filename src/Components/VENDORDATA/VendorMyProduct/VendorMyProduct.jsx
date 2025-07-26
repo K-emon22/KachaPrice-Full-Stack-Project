@@ -223,6 +223,8 @@ const VendorMyProduct = () => {
     pending: products.filter((p) => p.status === "pending").length,
   };
 
+  console.log(productStats);
+
   return (
     <div className="min-h-screen pt-0 mt-16 p-4 sm:p-6 lg:p-8">
       <motion.div
@@ -240,15 +242,18 @@ const VendorMyProduct = () => {
             marketplace.
           </p>
         </div>
-        <Link to="/dashboard/vendorAddProduct">
-          <motion.button
-            className="mt-4 sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/30"
-            whileHover={{scale: 1.05, y: -2}}
-            whileTap={{scale: 0.95}}
-          >
-            <FaPlus /> Add New Product
-          </motion.button>
-        </Link>
+
+        {productStats.length === !0 && (
+          <Link to="/dashboard/vendorAddProduct">
+            <motion.button
+              className="mt-4 sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/30"
+              whileHover={{scale: 1.05, y: -2}}
+              whileTap={{scale: 0.95}}
+            >
+              <FaPlus /> Add New Product
+            </motion.button>
+          </Link>
+        )}
       </motion.div>
 
       {isLoading ? (

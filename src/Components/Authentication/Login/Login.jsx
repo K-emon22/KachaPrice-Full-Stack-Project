@@ -391,7 +391,7 @@ const Login = () => {
       const role = data?.role || "user";
 
       if (role === "admin" || role === "vendor") {
-        navigate("/dashboard", { replace: true });
+        navigate("/", { replace: true });
       } else {
         navigate("/", { replace: true });
       }

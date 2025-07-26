@@ -327,6 +327,19 @@ const Dashboard = () => {
             </p>
           </div>
         )}
+
+        {role === "admin" && (
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-gray-700">
+              Coming Soon: Platform Overview
+            </h3>
+
+            <p className="text-gray-500 text-sm">
+              Get a bird’s-eye view of user growth, product activity, and
+              overall platform performance — all in one dashboard!
+            </p>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );

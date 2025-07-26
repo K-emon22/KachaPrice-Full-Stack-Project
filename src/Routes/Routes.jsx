@@ -43,6 +43,7 @@ import VendorEditProduct from "../Components/VENDORDATA/VendorEditProduct/Vendor
 import AllUsersForAdmin from "../Components/ADMINSITE/AllUsers/AllUsersForAdmin";
 import AllProductsForAdmin from "../Components/ADMINSITE/AllProducts/AllProductsForAdmin";
 import AllAdvertisementForAdmin from "../Components/ADMINSITE/AllAdvertisement/AllAdvertisementForAdmin";
+import LoggingOut from "../Components/LoggingOut/LoggingOut";
 
 export const Routes = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const Routes = createBrowserRouter([
       },
       {path: "/login", element: <Login />},
       {path: "/register", element: <Register />},
+      {
+        path: "logOut",
+        element: <LoggingOut></LoggingOut>,
+      },
       {
         path: "/allproduct",
         element: (
@@ -123,12 +128,18 @@ export const Routes = createBrowserRouter([
         path: "vendorEditProduct/:id",
         element: (
           <PrivateRoute>
-            {" "}
             <VendorRoute>
-              {" "}
               <VendorEditProduct></VendorEditProduct>
             </VendorRoute>
           </PrivateRoute>
+        ),
+      },
+      {
+        path: "adminEditProduct/:id",
+        element: (
+          <AdminRoute>
+            <VendorEditProduct />
+          </AdminRoute>
         ),
       },
       {
@@ -136,7 +147,7 @@ export const Routes = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AdminRoute>
-              <AllUsers />
+              <AllUsersForAdmin></AllUsersForAdmin>
             </AdminRoute>
           </PrivateRoute>
         ),
@@ -146,7 +157,7 @@ export const Routes = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AdminRoute>
-              <AllProducts />
+              <AllProductsForAdmin></AllProductsForAdmin>
             </AdminRoute>
           </PrivateRoute>
         ),

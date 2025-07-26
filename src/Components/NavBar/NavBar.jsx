@@ -630,14 +630,7 @@ const NavBAr = () => {
   const navigate = useNavigate();
 
   const logOut = () => {
-    navigate("/");
-    signOut(Auth)
-      .then(() => {
-        localStorage.removeItem("accessToken");
-      })
-      .catch((error) => {
-        console.error("Logout failed:", error);
-      });
+    navigate("/logOut");
   };
 
   const handleLogout = () => {
@@ -652,12 +645,6 @@ const NavBAr = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         logOut();
-        Swal.fire({
-          title: "Logged Out!",
-          text: "Successfully Logged Out.",
-          icon: "success",
-          showConfirmButton: true,
-        });
       }
     });
   };

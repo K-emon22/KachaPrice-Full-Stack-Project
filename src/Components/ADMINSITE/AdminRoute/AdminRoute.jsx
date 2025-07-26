@@ -17,7 +17,7 @@ const AdminRoute = ({children}) => {
     return <div className="text-red-600 p-4">Error: {error}</div>;
   }
 
-  if (role !== "vadmin") {
+  if (role !== "admin") {
     // If not vendor, redirect to forbidden page or show forbidden message
     return <Navigate to="/forbidden" replace />;
   }
