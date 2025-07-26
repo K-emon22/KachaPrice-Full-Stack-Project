@@ -97,6 +97,11 @@ const Dashboard = () => {
       },
       {
         icon: <MdAdminPanelSettings className="text-2xl transition" />,
+        title: "All Order",
+        path: "allorder",
+      },
+      {
+        icon: <MdAdminPanelSettings className="text-2xl transition" />,
         title: "All Advertisement",
         path: "allAdvertisement",
       },

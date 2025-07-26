@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {Link} from "react-router";
@@ -161,7 +161,7 @@ const ProductRow = ({product, index, onStatusChange, onDelete, isLast}) => {
                   </>
                 )}
                 <Link
-                  to={`/dashboard/update-product/${product._id}`}
+                  to={`/adminEditProduct/${product._id}`}
                   className="w-full text-left font-semibold text-sm text-blue-600 flex items-center gap-2 px-3 py-2 hover:bg-blue-50"
                 >
                   <FaEdit /> Update
@@ -224,6 +224,10 @@ const Pagination = ({currentPage, totalPages, onPageChange}) => {
 };
 
 const AllProductsForAdmin = () => {
+  useEffect(() => {
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }, []);
+
   const {accessToken, loading: authLoading} = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
@@ -307,7 +311,7 @@ const AllProductsForAdmin = () => {
       >
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800">
           Product Management
-        </h1> 
+        </h1>
         <p className="text-lg text-slate-500 mt-2">
           Approve, reject, or remove product listings from all vendors.
         </p>

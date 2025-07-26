@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState, useRef} from "react";
 import {AuthContext} from "../../ContextFiles/AuthContext";
 import axios from "axios";
 import {motion, AnimatePresence} from "framer-motion";
@@ -14,13 +14,15 @@ import {
   FaBoxOpen,
   FaTasks,
   FaClipboardCheck,
+  FaEllipsisV,
 } from "react-icons/fa";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {Link} from "react-router"; // Corrected import
+import {Link} from "react-router"; // CORRECTED import
 import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_API;
 
+// --- Data Fetching ---
 const fetchVendorProducts = async (email, accessToken) => {
   const {data} = await axios.get(
     `${BASE_URL}/allProduct/email?email=${email}`,
@@ -31,6 +33,7 @@ const fetchVendorProducts = async (email, accessToken) => {
   return data;
 };
 
+// --- Reusable UI Components ---
 const StatusBadge = ({status}) => {
   const styles = {
     pending: {
@@ -60,100 +63,163 @@ const StatusBadge = ({status}) => {
   );
 };
 
-const ProductListItemSkeleton = () => (
-  <div className="bg-white p-4 rounded-xl shadow-sm animate-pulse">
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex items-center gap-4 flex-grow">
+// --- Table Row Components ---
+const ProductTableRowSkeleton = () => (
+  <tr className="animate-pulse">
+    <td className="p-4 align-middle">
+      <div className="flex items-center gap-4">
         <div className="w-16 h-16 bg-slate-200 rounded-lg flex-shrink-0"></div>
         <div className="w-full">
           <div className="h-5 bg-slate-200 rounded w-48 mb-2"></div>
           <div className="h-3 bg-slate-200 rounded w-32"></div>
         </div>
       </div>
-      <div className="flex items-center justify-between mt-4 sm:mt-0 sm:gap-8 flex-shrink-0">
-        <div className="h-8 bg-slate-200 rounded w-20"></div>
-        <div className="h-8 bg-slate-200 rounded-full w-24"></div>
-        <div className="flex gap-2">
-          <div className="h-10 w-10 bg-slate-200 rounded-full"></div>
-          <div className="h-10 w-10 bg-slate-200 rounded-full"></div>
-        </div>
+    </td>
+    <td className="p-4 align-middle">
+      <div className="h-5 bg-slate-200 rounded w-16"></div>
+    </td>
+    <td className="p-4 align-middle">
+      <div className="h-8 bg-slate-200 rounded-full w-24"></div>
+    </td>
+    <td className="p-4 align-middle">
+      <div className="flex justify-end">
+        <div className="h-9 w-9 bg-slate-200 rounded-full"></div>
       </div>
-    </div>
-  </div>
+    </td>
+  </tr>
 );
 
-const ProductListItem = ({product, index, onDelete}) => (
-  <motion.div
-    layout
-    className="bg-white p-4 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300"
-    variants={{
-      hidden: {opacity: 0, y: 20},
-      visible: {opacity: 1, y: 0},
-      exit: {opacity: 0, x: -50, transition: {duration: 0.3}},
-    }}
-    initial="hidden"
-    animate="visible"
-    exit="exit"
-    transition={{delay: index * 0.05}}
-  >
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      {/* Product Info */}
-      <div className="flex items-center gap-4 flex-grow min-w-0">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-        />
-        <div className="min-w-0">
-          <p className="font-bold text-slate-800 truncate">{product.name}</p>
-          <p className="text-sm text-slate-500 flex items-center gap-1.5">
-            <FaStore size={12} /> {product.market}
-          </p>
-        </div>
-      </div>
+const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
-      {/* Details & Actions */}
-      <div className="flex flex-col items-stretch gap-4 mt-4 sm:flex-row sm:items-center sm:gap-6 sm:mt-0 flex-shrink-0">
-        <div className="flex justify-between items-center gap-4">
-          <div className="text-left">
-            <p className="text-xs text-slate-500">Price</p>
-            <p className="font-semibold text-green-600">৳{product.price}</p>
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // NEW: Dynamic positioning and animation logic
+  const getMenuConfig = () => {
+    if (totalItems === 1) {
+      return {
+        positionClasses: "right-full mr-2 top-1/2 -translate-y-1/2",
+        animation: {
+          initial: {opacity: 0, x: 10},
+          animate: {opacity: 1, x: 0},
+          exit: {opacity: 0, x: 10},
+        },
+      };
+    }
+    return {
+      positionClasses: isLast
+        ? "bottom-full mb-2 right-0"
+        : "top-full mt-2 right-0",
+      animation: {
+        initial: {opacity: 0, y: isLast ? 10 : -10},
+        animate: {opacity: 1, y: 0},
+        exit: {opacity: 0, y: isLast ? 10 : -10},
+      },
+    };
+  };
+
+  const {positionClasses, animation} = getMenuConfig();
+
+  return (
+    <motion.tr
+      layout
+      className="hover:bg-slate-50 transition-colors duration-200"
+      variants={{
+        hidden: {opacity: 0, y: 20},
+        visible: {opacity: 1, y: 0},
+      }}
+      initial="hidden"
+      animate="visible"
+      exit={{opacity: 0, x: -50, transition: {duration: 0.3}}}
+      transition={{delay: index * 0.05}}
+    >
+      <td className="p-4 align-middle">
+        <div className="flex items-center gap-4">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-16 h-16 rounded-lg object-cover flex-shrink-0 shadow-sm"
+          />
+          <div>
+            <p className="font-bold text-slate-800">{product.name}</p>
+            <p className="text-sm text-slate-500 flex items-center gap-1.5">
+              <FaStore size={12} /> {product.market}
+            </p>
           </div>
-          <div className="text-left">
-            <p className="text-xs text-slate-500 mb-1">Status</p>
-            <StatusBadge status={product.status} />
-          </div>
         </div>
-        <div className="flex items-center gap-2 justify-end">
-          <Link
-            to={`/product/${product._id}`}
-            className="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-500 rounded-full transition-all"
-            title="See Details"
-          >
-            <FaEye />
-          </Link>
-
-          <Link
-            to={`/vendorEditProduct/${product._id}`}
-            className="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-green-100 text-slate-600 hover:text-green-500 rounded-full transition-all"
-            title="Edit"
-          >
-            <FaEdit />
-          </Link>
-
+      </td>
+      <td className="p-4 align-middle font-semibold text-green-600">
+        ৳{product.price}
+      </td>
+      <td className="p-4 align-middle">
+        <StatusBadge status={product.status} />
+      </td>
+      <td className="p-4 align-middle">
+        <div className="relative flex justify-end" ref={menuRef}>
           <button
-            onClick={() => onDelete(product._id)}
-            className="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-500 rounded-full transition-all"
-            title="Delete"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-2 rounded-full hover:bg-slate-200 transition-colors"
           >
-            <FaTrash />
+            <FaEllipsisV className="text-slate-600" />
           </button>
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                className={`absolute w-40 bg-white rounded-lg shadow-xl border z-10 overflow-hidden ${positionClasses}`}
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+              >
+                <ul className="p-1">
+                  <li>
+                    <Link
+                      to={`/product/${product._id}`}
+                      className="w-full text-left font-semibold text-sm text-blue-600 flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-md"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <FaEye /> View
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={`/vendorEditProduct/${product._id}`}
+                      className="w-full text-left font-semibold text-sm text-green-600 flex items-center gap-2 px-3 py-2 hover:bg-green-50 rounded-md"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <FaEdit /> Edit
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        onDelete(product._id);
+                        setMenuOpen(false);
+                      }}
+                      className="w-full text-left font-semibold text-sm text-red-600 flex items-center gap-2 px-3 py-2 hover:bg-red-50 rounded-md"
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  </li>
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
-    </div>
-  </motion.div>
-);
+      </td>
+    </motion.tr>
+  );
+};
 
+// --- Main Component ---
 const VendorMyProduct = () => {
   useEffect(() => {
     window.scrollTo({top: 0, behavior: "smooth"});
@@ -186,30 +252,16 @@ const VendorMyProduct = () => {
         title: "Deleting...",
         text: "Please wait.",
         allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
+        didOpen: () => Swal.showLoading(),
       });
-
       try {
-        const res = await axios.delete(`${BASE_URL}/allProduct/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+        await axios.delete(`${BASE_URL}/allProduct/${id}`, {
+          headers: {Authorization: `Bearer ${accessToken}`},
         });
-
-        if (res.status === 200 || res.status === 204) {
-          await queryClient.invalidateQueries({
-            queryKey: ["vendorProducts", user?.email],
-          });
-          Swal.fire("Deleted!", "Product deleted successfully.", "success");
-        } else {
-          Swal.fire(
-            "Not Deleted",
-            "The server did not confirm the deletion.",
-            "info"
-          );
-        }
+        await queryClient.invalidateQueries({
+          queryKey: ["vendorProducts", user?.email],
+        });
+        Swal.fire("Deleted!", "Product deleted successfully.", "success");
       } catch (error) {
         console.error("Delete failed:", error);
         Swal.fire("Error", "Failed to delete product.", "error");
@@ -223,31 +275,36 @@ const VendorMyProduct = () => {
     pending: products.filter((p) => p.status === "pending").length,
   };
 
-  console.log(productStats);
-
   return (
     <div className="min-h-screen pt-0 mt-16 p-4 sm:p-6 lg:p-8">
+      {/* --- Header --- */}
       <motion.div
-        className="flex flex-col sm:flex-row justify-between items-center mb-12"
+        className="flex flex-col sm:flex-row justify-between items-center mb-8"
         initial={{opacity: 0, y: -20}}
         animate={{opacity: 1, y: 0}}
-        transition={{duration: 0.5}}
       >
         <div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-3">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800">
             My Product Listings
           </h1>
-          <p className="max-w-2xl text-lg text-slate-500">
-            Manage and track the status of all the products you've added to the
-            marketplace.
+          <p className="mt-1 max-w-2xl text-md text-slate-500">
+            Manage all the products you've added to the marketplace.
           </p>
         </div>
-
-        {productStats.length === !0 && (
+        {/* <Link to="/vendorAddProduct">
+          <motion.button
+            className="mt-4 w-full sm:w-auto sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl"
+            whileHover={{scale: 1.05}}
+            whileTap={{scale: 0.95}}
+          >
+            <FaPlus /> Add New Product
+          </motion.button>
+        </Link> */}
+        {!isLoading && products.length > 0 && (
           <Link to="/dashboard/vendorAddProduct">
             <motion.button
-              className="mt-4 sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/30"
-              whileHover={{scale: 1.05, y: -2}}
+              className="mt-4 w-full sm:w-auto sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl"
+              whileHover={{scale: 1.05}}
               whileTap={{scale: 0.95}}
             >
               <FaPlus /> Add New Product
@@ -256,11 +313,18 @@ const VendorMyProduct = () => {
         )}
       </motion.div>
 
+      {/* --- Main Content Area --- */}
       {isLoading ? (
-        <div className="space-y-4">
-          {Array.from({length: 4}).map((_, i) => (
-            <ProductListItemSkeleton key={i} />
-          ))}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <tbody className="divide-y divide-slate-100">
+                {Array.from({length: 4}).map((_, i) => (
+                  <ProductTableRowSkeleton key={i} />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : products.length === 0 ? (
         <motion.div
@@ -273,11 +337,10 @@ const VendorMyProduct = () => {
             No Products Found
           </h3>
           <p className="text-slate-500 mt-2">
-            You haven't added any products yet. Get started by adding your first
-            one!
+            Get started by adding your first product!
           </p>
           <Link
-            to="/dashboard/vendorAddProduct"
+            to="/vendorAddProduct"
             className="mt-6 inline-block bg-green-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
           >
             Add a Product
@@ -285,39 +348,74 @@ const VendorMyProduct = () => {
         </motion.div>
       ) : (
         <div className="space-y-8">
-          <motion.div layout className="space-y-4">
-            <AnimatePresence>
-              {products.map((product, index) => (
-                <ProductListItem
-                  key={product._id}
-                  product={product}
-                  index={index}
-                  onDelete={handleDelete}
-                />
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          {/* --- Products Table (Scrollable) --- */}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="p-4 text-left font-semibold text-slate-600 uppercase tracking-wider">
+                      Product
+                    </th>
+                    <th className="p-4 text-left font-semibold text-slate-600 uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th className="p-4 text-left font-semibold text-slate-600 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="p-4 text-right font-semibold text-slate-600 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <AnimatePresence>
+                    {products.map((product, index) => (
+                      <ProductTableRow
+                        key={product._id}
+                        product={product}
+                        index={index}
+                        onDelete={handleDelete}
+                        isLast={index === products.length - 1}
+                        totalItems={products.length} // Pass total item count
+                      />
+                    ))}
+                  </AnimatePresence>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
+          {/* --- Statistics Section --- */}
           <motion.div
-            className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl shadow-lg p-6 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center"
+            className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl shadow-lg p-6 grid grid-cols-3 gap-6 text-center"
             initial={{opacity: 0, y: 20}}
             animate={{opacity: 1, y: 0}}
-            transition={{delay: products.length * 0.05 + 0.2}}
+            transition={{delay: 0.2}}
           >
             <div className="flex flex-col items-center">
               <FaTasks className="text-3xl text-green-200 mb-2" />
               <p className="text-4xl font-bold">{productStats.total}</p>
-              <p className="text-sm text-green-200">Total Products</p>
+              <div className="mt-auto">
+                <p className="text-sm text-green-200">Total Products</p>
+              </div>
             </div>
+
             <div className="flex flex-col items-center">
               <FaClipboardCheck className="text-3xl text-green-200 mb-2" />
               <p className="text-4xl font-bold">{productStats.approved}</p>
-              <p className="text-sm text-green-200">Approved</p>
+              <div className="mt-auto">
+                <p className="text-sm text-green-200">Approved</p>
+              </div>
             </div>
+
             <div className="flex flex-col items-center">
               <FaClock className="text-3xl text-green-200 mb-2" />
               <p className="text-4xl font-bold">{productStats.pending}</p>
-              <p className="text-sm text-green-200">Pending</p>
+              <div className="mt-auto">
+                {" "}
+                <p className="text-sm text-green-200">Pending</p>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -1,4 +1,4 @@
-// import React, {useContext, useState} from "react";
+// import React, {useContext, useState, useEffect, useRef} from "react";
 // import {AuthContext} from "../../ContextFiles/AuthContext";
 // import axios from "axios";
 // import {toast, ToastContainer} from "react-toastify";
@@ -13,12 +13,14 @@
 //   FaAlignLeft,
 //   FaEdit,
 //   FaTrash,
+//   FaClock,
+//   FaCheckCircle,
 // } from "react-icons/fa";
+// import {HiDotsVertical} from "react-icons/hi";
 // import {CgSpinner} from "react-icons/cg";
 // import "react-toastify/dist/ReactToastify.css";
 
-// // NOTE: Replace this with your actual environment variable
-// const BASE_URL = "http://localhost:4000";
+// const BASE_URL = import.meta.env.VITE_API;
 
 // // --- Data Fetching Function for React Query ---
 // const fetchAds = async (email, accessToken) => {
@@ -32,6 +34,32 @@
 // };
 
 // // --- Reusable Components ---
+// const StatusBadge = ({status}) => {
+//   const statusStyles = {
+//     pending: {
+//       icon: <FaClock />,
+//       text: "Pending",
+//       className: "bg-yellow-100 text-yellow-800",
+//     },
+//     approved: {
+//       icon: <FaCheckCircle />,
+//       text: "Approved",
+//       className: "bg-green-100 text-green-800",
+//     },
+//   };
+
+//   const currentStatus = statusStyles[status] || statusStyles.pending;
+
+//   return (
+//     <div
+//       className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full ${currentStatus.className}`}
+//     >
+//       {currentStatus.icon}
+//       <span>{currentStatus.text}</span>
+//     </div>
+//   );
+// };
+
 // const AdTableRowSkeleton = () => (
 //   <tr className="animate-pulse">
 //     <td className="p-4 align-middle">
@@ -45,75 +73,116 @@
 //       <div className="h-4 bg-slate-200 rounded w-5/6"></div>
 //     </td>
 //     <td className="p-4 align-middle">
+//       <div className="h-6 bg-slate-200 rounded-full w-24"></div>
+//     </td>
+//     <td className="p-4 align-middle">
 //       <div className="flex gap-3">
-//         <div className="w-24 h-9 bg-slate-200 rounded-lg"></div>
-//         <div className="w-24 h-9 bg-slate-200 rounded-lg"></div>
+//         <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
 //       </div>
 //     </td>
 //   </tr>
 // );
 
-// const AdTableRow = ({ad, onEdit, onDelete, index}) => (
-//   <motion.tr
-//     className="hover:bg-slate-50/50 transition-colors duration-200"
-//     variants={{
-//       hidden: {opacity: 0, y: 20},
-//       visible: {opacity: 1, y: 0},
-//     }}
-//     initial="hidden"
-//     animate="visible"
-//     transition={{delay: index * 0.05}}
-//   >
-//     <td className="p-4 align-middle">
-//       <img
-//         src={
-//           ad.image || "https://placehold.co/120x80/e2e8f0/64748b?text=No+Image"
-//         }
-//         alt={ad.title}
-//         className="w-28 h-20 object-cover rounded-lg shadow-sm"
-//       />
-//     </td>
-//     <td className="p-4 align-middle font-bold text-slate-800">{ad.title}</td>
-//     <td className="p-4 align-top text-sm text-slate-600 max-w-sm">
-//       <div className="h-20 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
-//         {ad.description}
-//       </div>
-//     </td>
-//     <td className="p-4">
-//       <span
-//         className={`px-2 py-1 rounded-full text-white text-xs font-semibold ${
-//           ad.status === "pending"
-//             ? "bg-yellow-500"
-//             : ad.status === "approved"
-//             ? "bg-green-600"
-//             : "bg-gray-400"
-//         }`}
-//       >
-//         {ad.status}
-//       </span>
-//     </td>
-//     <td className="p-4 align-middle">
-//       <div className="flex items-center gap-3">
-//         <motion.button
-//           whileHover={{scale: 1.05}}
-//           whileTap={{scale: 0.95}}
-//           onClick={() => onEdit(ad)}
-//           className="font-semibold text-sm text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-blue-100"
-//         >
-//           <FaEdit /> Update
-//         </motion.button>
-//         <motion.button
-//           whileHover={{scale: 1.05}}
-//           whileTap={{scale: 0.95}}
-//           onClick={() => onDelete(ad._id)}
-//           className="font-semibold text-sm text-red-600 hover:text-red-800 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-red-100"
-//         >
-//           <FaTrash /> Delete
-//         </motion.button>
-//       </div>
-//     </td>
-//   </motion.tr>
-// );
+// const AdTableRow = ({ad, onEdit, onDelete, index}) => {
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   const menuRef = useRef(null);
+
+//   // Effect to close the menu if a click occurs outside of it
+//   useEffect(() => {
+//     const handleClickOutside = (event) => {
+//       if (menuRef.current && !menuRef.current.contains(event.target)) {
+//         setIsMenuOpen(false);
+//       }
+//     };
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => {
+//       document.removeEventListener("mousedown", handleClickOutside);
+//     };
+//   }, []);
+
+//   return (
+//     <motion.tr
+//       className="hover:bg-slate-50/50 transition-colors duration-200"
+//       variants={{
+//         hidden: {opacity: 0, y: 20},
+//         visible: {opacity: 1, y: 0},
+//       }}
+//       initial="hidden"
+//       animate="visible"
+//       transition={{delay: index * 0.05}}
+//     >
+//       <td className="p-4 align-middle">
+//         <img
+//           src={
+//             ad.image ||
+//             "https://placehold.co/120x80/e2e8f0/64748b?text=No+Image"
+//           }
+//           alt={ad.title}
+//           className="w-28 h-20 object-cover rounded-lg shadow-sm"
+//         />
+//       </td>
+//       <td className="p-4 align-middle font-bold text-slate-800">{ad.title}</td>
+//       <td className="p-4 align-top text-sm text-slate-600 max-w-sm">
+//         <div className="h-20 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
+//           {ad.description}
+//         </div>
+//       </td>
+//       <td className="p-4 align-middle">
+//         <StatusBadge status={ad.status || "pending"} />
+//       </td>
+//       {/* --- Action Menu Column --- */}
+//       <td className="p-4 align-middle">
+//         <div className="relative" ref={menuRef}>
+//           <motion.button
+//             whileTap={{scale: 0.95}}
+//             onClick={() => setIsMenuOpen(!isMenuOpen)}
+//             className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-600"
+//           >
+//             <HiDotsVertical size={20} />
+//           </motion.button>
+//           <AnimatePresence>
+//             {isMenuOpen && (
+//               <motion.div
+//                 initial={{opacity: 0, scale: 0.9, y: -10}}
+//                 animate={{opacity: 1, scale: 1, y: 0}}
+//                 exit={{opacity: 0, scale: 0.9, y: -10}}
+//                 transition={{duration: 0.15}}
+//                 className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl z-10 border border-slate-100"
+//               >
+//                 <ul className="p-1">
+//                   <li>
+//                     <button
+//                       onClick={() => {
+//                         onEdit(ad);
+//                         setIsMenuOpen(false);
+//                       }}
+//                       className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+//                     >
+//                       <FaEdit />
+//                       <span>Update</span>
+//                     </button>
+//                   </li>
+//                   <li>
+//                     <button
+//                       onClick={() => {
+//                         onDelete(ad._id);
+//                         setIsMenuOpen(false);
+//                       }}
+//                       className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors"
+//                     >
+//                       <FaTrash />
+//                       <span>Delete</span>
+//                     </button>
+//                   </li>
+//                 </ul>
+//               </motion.div>
+//             )}
+//           </AnimatePresence>
+//         </div>
+//       </td>
+//     </motion.tr>
+//   );
+// };
 
 // const AdFormModal = ({isOpen, onClose, onSubmit, ad, isEditMode}) => {
 //   const [formData, setFormData] = useState({
@@ -329,7 +398,7 @@
 //   };
 
 //   return (
-//     <div className="min-h-screen mt-16  p-4 sm:p-6  pt-0 lg:p-8">
+//     <div className="min-h-screen pt-0 mt-16 p-4 sm:p-6 lg:p-8">
 //       <ToastContainer
 //         position="top-right"
 //         autoClose={3000}
@@ -361,7 +430,6 @@
 //       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
 //         <div className="overflow-x-auto">
 //           <table className="min-w-full divide-y divide-slate-200 table-fixed">
-//             {/* ✅ FIX: Conditionally render the table head */}
 //             {(isLoading || ads.length > 0) && (
 //               <thead className="bg-slate-100">
 //                 <tr>
@@ -374,7 +442,7 @@
 //                   <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
 //                     Description
 //                   </th>
-//                   <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+//                   <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-40">
 //                     Status
 //                   </th>
 //                   <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-52">
@@ -449,12 +517,7 @@
 // };
 
 // export default VendorAdvertisement;
-
-
-
-
-
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useEffect, useRef} from "react";
 import {AuthContext} from "../../ContextFiles/AuthContext";
 import axios from "axios";
 import {toast, ToastContainer} from "react-toastify";
@@ -472,6 +535,7 @@ import {
   FaClock,
   FaCheckCircle,
 } from "react-icons/fa";
+import {HiDotsVertical} from "react-icons/hi";
 import {CgSpinner} from "react-icons/cg";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -489,7 +553,7 @@ const fetchAds = async (email, accessToken) => {
 };
 
 // --- Reusable Components ---
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({status}) => {
   const statusStyles = {
     pending: {
       icon: <FaClock />,
@@ -506,7 +570,9 @@ const StatusBadge = ({ status }) => {
   const currentStatus = statusStyles[status] || statusStyles.pending;
 
   return (
-    <div className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full ${currentStatus.className}`}>
+    <div
+      className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full ${currentStatus.className}`}
+    >
       {currentStatus.icon}
       <span>{currentStatus.text}</span>
     </div>
@@ -529,65 +595,139 @@ const AdTableRowSkeleton = () => (
       <div className="h-6 bg-slate-200 rounded-full w-24"></div>
     </td>
     <td className="p-4 align-middle">
-      <div className="flex gap-3">
-        <div className="w-24 h-9 bg-slate-200 rounded-lg"></div>
-        <div className="w-24 h-9 bg-slate-200 rounded-lg"></div>
+      <div className="flex justify-start">
+        <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
       </div>
     </td>
   </tr>
 );
 
-const AdTableRow = ({ad, onEdit, onDelete, index}) => (
-  <motion.tr
-    className="hover:bg-slate-50/50 transition-colors duration-200"
-    variants={{
-      hidden: {opacity: 0, y: 20},
-      visible: {opacity: 1, y: 0},
-    }}
-    initial="hidden"
-    animate="visible"
-    transition={{delay: index * 0.05}}
-  >
-    <td className="p-4 align-middle">
-      <img
-        src={
-          ad.image || "https://placehold.co/120x80/e2e8f0/64748b?text=No+Image"
-        }
-        alt={ad.title}
-        className="w-28 h-20 object-cover rounded-lg shadow-sm"
-      />
-    </td>
-    <td className="p-4 align-middle font-bold text-slate-800">{ad.title}</td>
-    <td className="p-4 align-top text-sm text-slate-600 max-w-sm">
-      <div className="h-20 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
-        {ad.description}
-      </div>
-    </td>
-    <td className="p-4 align-middle">
-      <StatusBadge status={ad.status || "pending"} />
-    </td>
-    <td className="p-4 align-middle">
-      <div className="flex items-center gap-3">
-        <motion.button
-          whileHover={{scale: 1.05}}
-          whileTap={{scale: 0.95}}
-          onClick={() => onEdit(ad)}
-          className="font-semibold text-sm text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-blue-100"
-        >
-          <FaEdit /> Update
-        </motion.button>
-        <motion.button
-          whileHover={{scale: 1.05}}
-          whileTap={{scale: 0.95}}
-          onClick={() => onDelete(ad._id)}
-          className="font-semibold text-sm text-red-600 hover:text-red-800 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-red-100"
-        >
-          <FaTrash /> Delete
-        </motion.button>
-      </div>
-    </td>
-  </motion.tr>
-);
+const AdTableRow = ({ad, onEdit, onDelete, index, isLast, totalItems}) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // Effect to close the menu if a click occurs outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // NEW: Dynamic positioning and animation logic
+  const getMenuConfig = () => {
+    if (totalItems === 1) {
+      return {
+        positionClasses: "right-full mr-2 top-1/2 -translate-y-1/2",
+        animation: {
+          initial: {opacity: 0, x: 10},
+          animate: {opacity: 1, x: 0},
+          exit: {opacity: 0, x: 10},
+        },
+      };
+    }
+    return {
+      positionClasses: isLast
+        ? "bottom-full mb-2 right-0"
+        : "top-full mt-2 right-0",
+      animation: {
+        initial: {opacity: 0, y: isLast ? 10 : -10},
+        animate: {opacity: 1, y: 0},
+        exit: {opacity: 0, y: isLast ? 10 : -10},
+      },
+    };
+  };
+
+  const {positionClasses, animation} = getMenuConfig();
+
+  return (
+    <motion.tr
+      className="hover:bg-slate-50/50 transition-colors duration-200"
+      variants={{
+        hidden: {opacity: 0, y: 20},
+        visible: {opacity: 1, y: 0},
+      }}
+      initial="hidden"
+      animate="visible"
+      transition={{delay: index * 0.05}}
+    >
+      <td className="p-4 align-middle">
+        <img
+          src={
+            ad.image ||
+            "https://placehold.co/120x80/e2e8f0/64748b?text=No+Image"
+          }
+          alt={ad.title}
+          className="w-28 h-20 object-cover rounded-lg shadow-sm"
+        />
+      </td>
+      <td className="p-4 align-middle font-bold text-slate-800">{ad.title}</td>
+      <td className="p-4 align-top text-sm text-slate-600 max-w-sm">
+        <div className="h-20 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
+          {ad.description}
+        </div>
+      </td>
+      <td className="p-4 align-middle">
+        <StatusBadge status={ad.status || "pending"} />
+      </td>
+      {/* --- Action Menu Column --- */}
+      <td className="p-4 align-middle">
+        <div className="relative flex w-full justify-end" ref={menuRef}>
+          <motion.button
+            whileTap={{scale: 0.95}}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-600"
+          >
+            <HiDotsVertical size={20} />
+          </motion.button>
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                className={`absolute w-40 bg-white rounded-lg shadow-xl z-10 border border-slate-100 ${positionClasses}`}
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                transition={{duration: 0.15}}
+              >
+                <ul className="p-1">
+                  <li>
+                    <button
+                      onClick={() => {
+                        onEdit(ad);
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+                    >
+                      <FaEdit />
+                      <span>Update</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        onDelete(ad._id);
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-slate-700 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors"
+                    >
+                      <FaTrash />
+                      <span>Delete</span>
+                    </button>
+                  </li>
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </td>
+    </motion.tr>
+  );
+};
 
 const AdFormModal = ({isOpen, onClose, onSubmit, ad, isEditMode}) => {
   const [formData, setFormData] = useState({
@@ -870,6 +1010,8 @@ const VendorAdvertisement = () => {
                       onEdit={handleOpenModal}
                       onDelete={handleDelete}
                       index={i}
+                      isLast={i === ads.length - 1}
+                      totalItems={ads.length}
                     />
                   ))}
                 </AnimatePresence>

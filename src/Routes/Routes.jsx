@@ -44,6 +44,7 @@ import AllUsersForAdmin from "../Components/ADMINSITE/AllUsers/AllUsersForAdmin"
 import AllProductsForAdmin from "../Components/ADMINSITE/AllProducts/AllProductsForAdmin";
 import AllAdvertisementForAdmin from "../Components/ADMINSITE/AllAdvertisement/AllAdvertisementForAdmin";
 import LoggingOut from "../Components/LoggingOut/LoggingOut";
+import AdminAllOrder from "../Components/ADMINSITE/AdminAllOrder/AdminAllOrder";
 
 export const Routes = createBrowserRouter([
   {
@@ -216,6 +217,10 @@ export const Routes = createBrowserRouter([
       {
         path: "allAdvertisement",
         element: <AllAdvertisementForAdmin></AllAdvertisementForAdmin>,
+      },
+      {
+        path: "allorder",
+        element: <AdminAllOrder></AdminAllOrder>,
       },
     ],
   },
