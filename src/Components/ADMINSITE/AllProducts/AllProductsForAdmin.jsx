@@ -307,7 +307,7 @@ const AllProductsForAdmin = () => {
       >
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800">
           Product Management
-        </h1>
+        </h1> 
         <p className="text-lg text-slate-500 mt-2">
           Approve, reject, or remove product listings from all vendors.
         </p>
