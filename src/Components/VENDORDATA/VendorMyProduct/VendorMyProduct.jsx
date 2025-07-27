@@ -15,6 +15,7 @@ import {
   FaTasks,
   FaClipboardCheck,
   FaEllipsisV,
+  FaInfoCircle, // Added Icon
 } from "react-icons/fa";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {Link} from "react-router"; // CORRECTED import
@@ -103,7 +104,6 @@ const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // NEW: Dynamic positioning and animation logic
   const getMenuConfig = () => {
     if (totalItems === 1) {
       return {
@@ -128,6 +128,18 @@ const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
   };
 
   const {positionClasses, animation} = getMenuConfig();
+
+  // --- NEW: Function to show rejection reason modal ---
+  const handleShowReason = () => {
+    setMenuOpen(false); // Close the action menu first
+    Swal.fire({
+      title: "Reason for Rejection",
+      text: product.rejectionReason,
+      icon: "info",
+      confirmButtonText: "OK",
+      confirmButtonColor: "green",
+    });
+  };
 
   return (
     <motion.tr
@@ -180,6 +192,17 @@ const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
                 exit={animation.exit}
               >
                 <ul className="p-1">
+                  {/* --- NEW: Conditional "View Reason" Button --- */}
+                  {product.status === "rejected" && product.rejectionReason && (
+                    <li>
+                      <button
+                        onClick={handleShowReason}
+                        className="w-full text-left font-semibold text-sm text-slate-700 flex items-center gap-2 px-3 py-2 hover:bg-slate-100 rounded-md"
+                      >
+                        <FaInfoCircle /> View Reason
+                      </button>
+                    </li>
+                  )}
                   <li>
                     <Link
                       to={`/product/${product._id}`}
@@ -291,17 +314,8 @@ const VendorMyProduct = () => {
             Manage all the products you've added to the marketplace.
           </p>
         </div>
-        {/* <Link to="/vendorAddProduct">
-          <motion.button
-            className="mt-4 w-full sm:w-auto sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl"
-            whileHover={{scale: 1.05}}
-            whileTap={{scale: 0.95}}
-          >
-            <FaPlus /> Add New Product
-          </motion.button>
-        </Link> */}
         {!isLoading && products.length > 0 && (
-          <Link to="/dashboard/vendorAddProduct">
+          <Link to="/vendorAddProduct">
             <motion.button
               className="mt-4 w-full sm:w-auto sm:mt-0 bg-green-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-xl"
               whileHover={{scale: 1.05}}
@@ -377,7 +391,7 @@ const VendorMyProduct = () => {
                         index={index}
                         onDelete={handleDelete}
                         isLast={index === products.length - 1}
-                        totalItems={products.length} // Pass total item count
+                        totalItems={products.length}
                       />
                     ))}
                   </AnimatePresence>
@@ -396,26 +410,19 @@ const VendorMyProduct = () => {
             <div className="flex flex-col items-center">
               <FaTasks className="text-3xl text-green-200 mb-2" />
               <p className="text-4xl font-bold">{productStats.total}</p>
-              <div className="mt-auto">
-                <p className="text-sm text-green-200">Total Products</p>
-              </div>
+              <p className="text-sm text-green-200">Total Products</p>
             </div>
 
             <div className="flex flex-col items-center">
               <FaClipboardCheck className="text-3xl text-green-200 mb-2" />
               <p className="text-4xl font-bold">{productStats.approved}</p>
-              <div className="mt-auto">
-                <p className="text-sm text-green-200">Approved</p>
-              </div>
+              <p className="text-sm text-green-200">Approved</p>
             </div>
 
             <div className="flex flex-col items-center">
               <FaClock className="text-3xl text-green-200 mb-2" />
               <p className="text-4xl font-bold">{productStats.pending}</p>
-              <div className="mt-auto">
-                {" "}
-                <p className="text-sm text-green-200">Pending</p>
-              </div>
+              <p className="text-sm text-green-200">Pending</p>
             </div>
           </motion.div>
         </div>

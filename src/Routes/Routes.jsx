@@ -45,11 +45,13 @@ import AllProductsForAdmin from "../Components/ADMINSITE/AllProducts/AllProducts
 import AllAdvertisementForAdmin from "../Components/ADMINSITE/AllAdvertisement/AllAdvertisementForAdmin";
 import LoggingOut from "../Components/LoggingOut/LoggingOut";
 import AdminAllOrder from "../Components/ADMINSITE/AdminAllOrder/AdminAllOrder";
+import Error from "../Components/Error/Error";
 
 export const Routes = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <Error></Error>,
     children: [
       {
         path: "/",
@@ -171,6 +173,7 @@ export const Routes = createBrowserRouter([
   },
   {
     path: "/dashboard",
+    errorElement: <Error></Error>,
     element: (
       <PrivateRoute>
         <DashboardLayout />

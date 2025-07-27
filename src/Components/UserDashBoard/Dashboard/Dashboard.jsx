@@ -19,18 +19,21 @@ import {MdAddShoppingCart} from "react-icons/md";
 import {MdCampaign} from "react-icons/md";
 import {VscDiffAdded} from "react-icons/vsc";
 import {RiAdvertisementLine} from "react-icons/ri";
+
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const {logout} = useContext(AuthContext);
   const {role, roleLoading} = UserRoleCheck();
+
   const MenuItemSkeleton = () => (
     <li className="flex items-center gap-4 px-3 py-2 w-full animate-pulse">
       <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
       <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
     </li>
   );
+
   const menuItems = useMemo(() => {
     if (roleLoading) return [];
 
@@ -89,7 +92,6 @@ const Dashboard = () => {
         title: "All Users",
         path: "manageusers",
       },
-
       {
         icon: <MdAdminPanelSettings className="text-2xl transition" />,
         title: "All Products",
@@ -112,17 +114,7 @@ const Dashboard = () => {
     return [...baseItems, ...userItems];
   }, [role, roleLoading]);
 
-  // const logOut = () => {
-  //   logout() // this is from context
-  //     .then(() => {
-  //       localStorage.removeItem("accessToken");
-  //       navigate("/");
-  //     })
-  //     .catch((error) => console.error("Logout error:", error));
-  // };
-
   const logOut = () => {
-    // 1. Navigate to the public homepage FIRST.
     navigate("/logOut");
   };
 
@@ -137,7 +129,7 @@ const Dashboard = () => {
       confirmButtonText: "Yes, Logout",
     }).then((result) => {
       if (result.isConfirmed) {
-        logOut(); // ✅ fix here
+        logOut();
         Swal.fire({
           title: "Logged Out!",
           text: "Successfully logged out.",
@@ -162,17 +154,12 @@ const Dashboard = () => {
   return (
     <>
       <div className="flex h-screen">
-        {/* Sidebar for lg+ */}
-        {/* The ONLY change is here: 'sticky' is now 'fixed' */}
         <nav className="hidden lg:flex flex-col w-64 bg-white border-r border-gray-200 shadow h-screen fixed top-0 z-50">
-          {/* Header - Fixed height */}
           <div className="h-[70px] flex items-center justify-center border-b animated-sea-green">
             <h1 className="text-xl font-bold w-full text-white px-4">
               Dashboard
             </h1>
           </div>
-
-          {/* Menu List - No Scroll */}
           <ul className="flex-1 flex flex-col gap-3 px-4 py-6 text-sm">
             {roleLoading ? (
               <>
@@ -192,7 +179,7 @@ const Dashboard = () => {
                     transition={{duration: 0.3, delay: idx * 0.05}}
                     className={`group rounded-md transition ${
                       active
-                        ? "bg-green-600 animated-sea-green text-white font-semibold shadow-[inset_5px_0_6px_-4px_rgba(0,0,0,0.4),_inset_-5px_0_6px_-4px_rgba(0,0,0,0.4)]"
+                        ? "bg-green-600 animated-sea-green border-black border-b-4 border-l-2 border-r-5 border-t-1 text-white font-semibold shadow-[inset_5px_0_6px_-4px_rgba(0,0,0,0.4),_inset_-5px_0_6px_-4px_rgba(0,0,0,0.4)]"
                         : "text-black hover:bg-green-400 hover:text-white font-semibold"
                     }`}
                   >
@@ -209,8 +196,6 @@ const Dashboard = () => {
                 );
               })
             )}
-
-            {/* Logout Button */}
             {!roleLoading && (
               <motion.li
                 onClick={confirmLogout}
@@ -218,7 +203,7 @@ const Dashboard = () => {
                 initial={{opacity: 0, x: -20}}
                 animate={{opacity: 1, x: 0}}
                 transition={{duration: 0.3, delay: menuItems.length * 0.05}}
-                className="group flex items-center gap-4 cursor-pointer text-red-500 hover:text-white hover:bg-red-500 px-3 py-2 rounded-md font-semibold transition mt-auto"
+                className="group flex items-center gap-4 cursor-pointer text-red-500 hover:text-white hover:bg-red-500 px-3 py-2 rounded-md font-semibold transition "
               >
                 <FaSignOutAlt className="text-xl transition group-hover:text-white" />
                 <span>Logout</span>
@@ -226,10 +211,7 @@ const Dashboard = () => {
             )}
           </ul>
         </nav>
-
-        {/* Main content area */}
         <div className="flex flex-col lg:ml-64  overflow-y-auto">
-          {/* Mobile Navbar */}
           <div className="lg:hidden animated-sea-green bg-green-600/30 backdrop-blur-sm fixed top-0 left-0 right-0 shadow border-b z-50 flex justify-between items-center px-4 py-3">
             <div className="text-lg font-semibold text-white ">Dashboard</div>
             <button
@@ -240,8 +222,6 @@ const Dashboard = () => {
               <FiMenu />
             </button>
           </div>
-
-          {/* Drawer Menu */}
           <div className=" lg:hidden">
             <AnimatePresence>
               {drawerOpen && (
@@ -265,7 +245,6 @@ const Dashboard = () => {
                         <FiX />
                       </button>
                     </div>
-
                     <ul className="flex flex-col gap-4 p-4 text-sm">
                       {menuItems.map(({icon, title, path}, idx) => {
                         const active = isActive(path);
@@ -277,7 +256,7 @@ const Dashboard = () => {
                             transition={{duration: 0.3, delay: idx * 0.05}}
                             className={`group rounded-md transition ${
                               active
-                                ? "bg-green-600 text-white font-semibold shadow-[inset_5px_0_6px_-4px_rgba(0,0,0,0.4),_inset_-5px_0_6px_-4px_rgba(0,0,0,0.4)]"
+                                ? "bg-green-600 text-white border-black border-b-4 border-l-2 animated-sea-green border-r-5 border-t-1 font-semibold shadow-[inset_5px_0_6px_-4px_rgba(0,0,0,0.4),_inset_-5px_0_6px_-4px_rgba(0,0,0,0.4)]"
                                 : "text-black hover:bg-green-400 hover:text-white font-semibold"
                             }`}
                           >
@@ -295,7 +274,6 @@ const Dashboard = () => {
                           </motion.li>
                         );
                       })}
-
                       <motion.li
                         onClick={() => {
                           confirmLogout();
@@ -315,8 +293,6 @@ const Dashboard = () => {
                       </motion.li>
                     </ul>
                   </motion.div>
-
-                  {/* Backdrop */}
                   <motion.div
                     onClick={() => setDrawerOpen(false)}
                     initial={{opacity: 0}}

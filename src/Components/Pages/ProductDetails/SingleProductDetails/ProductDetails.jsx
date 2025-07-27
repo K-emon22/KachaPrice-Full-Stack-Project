@@ -196,61 +196,62 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Link
-                    to={`/payment/${product._id}`}
-                    className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center gap-2 hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
-                  >
-                    <FaShoppingCart /> Buy Now
-                  </Link>
-                  <button
-                    onClick={handleWatchlist}
-                    disabled={addingWatchlist || isWishlisted}
-                    className={`w-full font-bold py-3 px-6 rounded-full flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 ${
-                      isWishlisted
-                        ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                        : "bg-slate-100 text-slate-800 hover:bg-slate-200"
-                    }`}
-                  >
-                    <AnimatePresence mode="wait">
-                      {isWishlisted ? (
-                        <motion.span
-                          key="wishlisted"
-                          className="flex items-center gap-2"
-                          initial={{opacity: 0}}
-                          animate={{opacity: 1}}
-                        >
-                          <FaCheck /> Watchlisted
-                        </motion.span>
-                      ) : addingWatchlist ? (
-                        <motion.span
-                          key="adding"
-                          className="flex items-center gap-2"
-                          initial={{opacity: 0}}
-                          animate={{opacity: 1}}
-                        >
-                          <div className="w-4 h-4 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />{" "}
-                          Adding...
-                        </motion.span>
-                      ) : (
-                        <motion.span
-                          key="add"
-                          className="flex items-center gap-2"
-                          initial={{opacity: 0}}
-                          animate={{opacity: 1}}
-                        >
-                          <FaHeart /> Add to Watchlist
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </button>
-                </div>
+                {role === "user" && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Link
+                      to={`/payment/${product._id}`}
+                      className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center gap-2 hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
+                    >
+                      <FaShoppingCart /> Buy Now
+                    </Link>
+                    <button
+                      onClick={handleWatchlist}
+                      disabled={addingWatchlist || isWishlisted}
+                      className={`w-full font-bold py-3 px-6 rounded-full flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 ${
+                        isWishlisted
+                          ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                          : "bg-slate-100 text-slate-800 hover:bg-slate-200"
+                      }`}
+                    >
+                      <AnimatePresence mode="wait">
+                        {isWishlisted ? (
+                          <motion.span
+                            key="wishlisted"
+                            className="flex items-center gap-2"
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                          >
+                            <FaCheck /> Watchlisted
+                          </motion.span>
+                        ) : addingWatchlist ? (
+                          <motion.span
+                            key="adding"
+                            className="flex items-center gap-2"
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                          >
+                            <div className="w-4 h-4 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />{" "}
+                            Adding...
+                          </motion.span>
+                        ) : (
+                          <motion.span
+                            key="add"
+                            className="flex items-center gap-2"
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                          >
+                            <FaHeart /> Add to Watchlist
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Other Sections */}
         {role === "user" && (
           <div className="mt-12">
             <ProductCompare productId={product._id} />
