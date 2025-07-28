@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState(null); // ✅ New
+  const [accessToken, setAccessToken] = useState(null); 
   const provider = new GoogleAuthProvider();
 
   const createUser = (email, password) => {
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         const token = await currentUser.getIdToken();
         setAccessToken(token);
         localStorage.setItem("accessToken", token);
-        console.log(token);
+
         
       } else {
         setAccessToken(null);

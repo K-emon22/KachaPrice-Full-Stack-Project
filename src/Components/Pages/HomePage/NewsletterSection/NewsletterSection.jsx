@@ -14,7 +14,7 @@ const NewsletterSection = () => {
     }
 
     toast.success("✅ Successfully subscribed!");
-    setEmail(""); // clear the input
+    setEmail(""); 
   };
 
   return (

@@ -81,9 +81,9 @@ const PriceTrend = () => {
     }, 300);
   };
 
-  // ✅ Define chart colors based on the price trend
-  const chartColor = priceTrend >= 0 ? "#e53e3e" : "#16a34a"; // Red for up, Green for down
-  const gradientId = `colorPrice_${selectedProduct?._id}`; // Unique ID for gradient
+
+  const chartColor = priceTrend >= 0 ? "#e53e3e" : "#16a34a"; 
+  const gradientId = `colorPrice_${selectedProduct?._id}`; 
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -197,7 +197,7 @@ const PriceTrend = () => {
                         margin={{top: 10, right: 30, left: 0, bottom: 0}}
                       >
                         <defs>
-                          {/* ✅ Gradient color is now dynamic */}
+
                           <linearGradient
                             id={gradientId}
                             x1="0"
@@ -230,10 +230,10 @@ const PriceTrend = () => {
                         <Area
                           type="monotone"
                           dataKey="price"
-                          stroke={chartColor} // ✅ Stroke color is now dynamic
+                          stroke={chartColor} 
                           strokeWidth={2}
                           fillOpacity={1}
-                          fill={`url(#${gradientId})`} // ✅ Fill uses the dynamic gradient
+                          fill={`url(#${gradientId})`} 
                         />
                       </AreaChart>
                     </ResponsiveContainer>

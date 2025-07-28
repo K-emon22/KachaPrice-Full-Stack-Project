@@ -28,7 +28,7 @@ const BeAVendor = () => {
         setAlreadyRequested(res.data?.vendorRequest === true);
       } catch (error) {
         console.error("Error checking vendor request:", error);
-        setAlreadyRequested(false); // fallback
+        setAlreadyRequested(false); 
       }
     };
 

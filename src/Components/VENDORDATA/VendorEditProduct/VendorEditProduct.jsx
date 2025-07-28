@@ -16,7 +16,7 @@ import {CgSpinner} from "react-icons/cg";
 
 const BASE_URL = import.meta.env.VITE_API;
 
-// --- Reusable Components ---
+
 const FormInput = ({
   icon,
   name,
@@ -136,7 +136,7 @@ const VendorEditProduct = () => {
 
       if (res.data.modifiedCount > 0) {
         await Swal.fire("Success!", "Product updated successfully!", "success");
-        // navigate("/dashboard/vendorMyProduct");
+
       } else {
         Swal.fire(
           "No Changes",

@@ -8,7 +8,7 @@ import {motion, AnimatePresence} from "framer-motion";
 
 const BASE_URL = import.meta.env.VITE_API;
 
-// --- Data Fetching Functions ---
+
 const fetchOrders = async (accessToken, email) => {
   const res = await axios.get(`${BASE_URL}/payments/user/${email}`, {
     headers: {Authorization: `Bearer ${accessToken}`},
@@ -23,7 +23,7 @@ const fetchProductById = async (productId, accessToken) => {
   return res.data;
 };
 
-// --- Reusable Components ---
+
 const OrderItemSkeleton = () => (
   <div className="bg-white p-4 rounded-xl shadow-sm animate-pulse">
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -68,7 +68,7 @@ const OrderItem = ({order, productData, index}) => {
       transition={{delay: index * 0.05}}
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        {/* Product Info */}
+
         <div className="flex items-center gap-4 flex-grow">
           <img
             src={productImage}
@@ -83,7 +83,7 @@ const OrderItem = ({order, productData, index}) => {
           </div>
         </div>
 
-        {/* Details & Action */}
+
         <div className="flex items-center justify-between mt-4 sm:mt-0 sm:justify-end sm:gap-8 flex-shrink-0">
           <div className="text-left">
             <p className="text-xs text-slate-500">Price</p>

@@ -147,7 +147,7 @@ const Register = () => {
           </motion.p>
         </div>
 
-        {/* Right Panel (Form) */}
+
         <div className="p-8 sm:p-10">
           <motion.div
             variants={containerVariants}

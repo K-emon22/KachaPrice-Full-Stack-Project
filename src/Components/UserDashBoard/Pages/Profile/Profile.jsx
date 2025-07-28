@@ -7,7 +7,7 @@ import {toast} from "react-toastify";
 import {updateProfile, getAuth} from "firebase/auth";
 import Lottie from "lottie-react";
 import LottieFiles from "../../../../../public/Dashboard Data Visualization.json";
-// Main Profile Component
+
 const Profile = () => {
   const {user} = useContext(AuthContext);
   const Auth = getAuth();
@@ -17,9 +17,8 @@ const Profile = () => {
   const [photo, setPhoto] = useState(
     user?.photoURL || `https://api.dicebear.com/8.x/initials/svg?seed=${name}`
   );
-  const [phone] = useState("017xxxxxxxx"); // Placeholder
-  const [address] = useState("Dhaka, Bangladesh"); // Placeholder
-
+  const [phone] = useState("017xxxxxxxx"); 
+  const [address] = useState("Dhaka, Bangladesh"); 
   const [showNameModal, setShowNameModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 

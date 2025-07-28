@@ -12,10 +12,9 @@
 
  */
 
-/* Green theme button with hover scale and border glow animation */
-/* Green Theme Button */
+
 .btn-primary {
-  background-color: #22c55e; /* Tailwind green-500 */
+  background-color: #22c55e; 
   color: white;
   padding: 0.5rem 1.25rem;
   font-weight: 600;
@@ -33,8 +32,8 @@
 .btn-primary:hover,
 .btn-primary:focus {
   transform: scale(1.05);
-  border-color: #16a34a; /* Tailwind green-600 */
-  box-shadow: 0 0 3px 1px rgba(22, 163, 74, 0.35); /* Half intensity */
+  border-color: #16a34a; 
+  box-shadow: 0 0 3px 1px rgba(22, 163, 74, 0.35); 
 }
 
 .btn-primary:hover {
@@ -50,9 +49,9 @@
   }
 }
 
-/* Red Theme Button */
+
 .btn-red {
-  background-color: #dc2626; /* Tailwind red-600 */
+  background-color: #dc2626; 
   color: white;
   padding: 0.5rem 1.25rem;
   font-weight: 600;
@@ -69,8 +68,8 @@
 .btn-red:hover,
 .btn-red:focus {
   transform: scale(1.05);
-  border-color: #b91c1c; /* Tailwind red-700 */
-  box-shadow: 0 0 3px 1px rgba(220, 38, 38, 0.35); /* Half intensity */
+  border-color: #b91c1c; 
+  box-shadow: 0 0 3px 1px rgba(220, 38, 38, 0.35); 
 }
 
 .btn-red:hover {

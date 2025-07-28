@@ -14,7 +14,7 @@ import { AuthContext } from "../../../ContextFiles/AuthContext";
 import { motion } from "framer-motion";
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 
-// --- Professional Skeleton Loader ---
+
 const ProductCompareSkeleton = () => (
   <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 animate-pulse">
     <div className="h-8 bg-slate-200 rounded w-1/2 mx-auto mb-4"></div>
@@ -28,7 +28,7 @@ const ProductCompareSkeleton = () => (
   </div>
 );
 
-// --- Main Component ---
+
 const colors = ["#3182ce", "#e53e3e", "#38a169", "#d69e2e", "#805ad5", "#dd6b20"];
 
 const normalizeDate = (input) => {

@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router"; // ✅ Corrected import
+import { Link } from "react-router"; 
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 
-// ✅ Professional Skeleton Loader for the Product Card
+
 const ProductCardSkeleton = () => (
   <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
     <div className="bg-slate-200 h-52 w-full"></div>
@@ -22,7 +22,7 @@ const ProductCardSkeleton = () => (
 
 const SortedSix = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ Added loading state
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     fetchSixProducts();
@@ -32,7 +32,7 @@ const SortedSix = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${import.meta.env.VITE_API}/allProduct/sortedsix`);
-      // Ensure the response structure is handled correctly
+
       setProducts(response.data.products || response.data); 
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -59,7 +59,7 @@ const SortedSix = () => {
           </p>
         </motion.div>
 
-        {/* ✅ Conditional Rendering for Skeleton vs. Products */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading ? (
             Array.from({ length: 6 }).map((_, index) => (
@@ -100,7 +100,7 @@ const SortedSix = () => {
                       <p className="text-slate-600 text-sm line-clamp-2 pt-1 text-justify" title={veg.description}>
                         {veg.description}
                       </p>
-                      {/* ✅ Added vendorName here */}
+
                       <p className="text-sm text-slate-500 pt-2">
                         Sold by: <span className="font-semibold text-slate-700">{veg.vendorName || "Unknown Vendor"}</span>
                       </p>

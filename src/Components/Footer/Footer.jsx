@@ -1,66 +1,88 @@
-
 import {FaFacebook, FaTwitter, FaInstagram, FaLinkedin} from "react-icons/fa";
-import { Link } from "react-router";
+import {Link} from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="backdrop-blur-sm bg-green-600/30 text-black w-full pt-10">
-      <div className=" grid grid-cols-1 md:grid-cols-3 gap-8  px-[2%] lg:px-[5%] ">
-        {/* Logo and Name */}
-        <div className="flex flex-row space-x-3 ">
-          {/* Logo Image */}
+    <footer className="bg-green-900 text-green-100 w-full">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-6 lg:px-8 pt-12 pb-10">
+        <div className="flex items-start space-x-4">
           <img
-            src="https://i.ibb.co/rGgpvbhM/Screenshot-2025-07-21-at-4-48-07-PM-removebg-preview.png" // Replace with your logo path or URL
+            src="https://i.ibb.co/rGgpvbhM/Screenshot-2025-07-21-at-4-48-07-PM-removebg-preview.png"
             alt="KachaPrice Logo"
-            className="w-20 h-12 "
+            className="w-16 h-auto mt-1"
           />
-
-          {/* Site Name and Tagline */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-1"> 𝙺𝚊𝚌𝚑𝚊Price</h2>
-            <p className="text-sm">Your daily local market price tracker</p>
+            <h2 className="text-2xl font-bold text-white mb-1">𝙺𝚊𝚌𝚑𝚊Price</h2>
+            <p className="text-sm text-green-200">
+              Your daily local market price tracker
+            </p>
           </div>
         </div>
 
-        {/* Contact Info */}
         <div>
-          <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
-          <p>Email: support@kanchadam.com</p>
-          <p>Phone: +880 1234-567890</p>
+          <h3 className="text-lg font-semibold text-white mb-3">Contact Us</h3>
+          <div className="space-y-2 text-sm text-green-200">
+            <p>Email: emonsheikhkhalid2@gmail.com</p>
+            <p>Phone: +880 1915367729</p>
+          </div>
         </div>
 
-        {/* Links and Social */}
         <div>
-          <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
-          <ul className="space-y-1 text-sm">
+          <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
+          <ul className="space-y-2 text-sm">
             <li>
-              <Link to={'/term'} className="hover:underline">
+              <Link
+                to={"/term"}
+                className="text-green-200 hover:text-white hover:underline transition-colors duration-300"
+              >
                 Terms & Conditions
               </Link>
             </li>
-          
           </ul>
 
-          {/* Social Icons */}
-          <div className="flex space-x-4 mt-4 pb-5">
-            <a href="#" aria-label="Facebook">
-              <FaFacebook className="text-xl hover:text-white/80" />
+          <div className="flex space-x-4 mt-6">
+            <a
+              href="https://www.facebook.com/mohammad.emon.sheikh"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="text-green-200 hover:text-white transition-colors duration-300"
+            >
+              <FaFacebook size={22} />
             </a>
-            <a href="#" aria-label="Twitter">
-              <FaTwitter className="text-xl hover:text-white/80" />
+            <a
+              href="www.linkedin.com/in/emonsheikh22"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="text-green-200 hover:text-white transition-colors duration-300"
+            >
+              <FaLinkedin size={22} />
             </a>
-            <a href="#" aria-label="Instagram">
-              <FaInstagram className="text-xl hover:text-white/80" />
+            <a
+              href="https://x.com/programminghero?lang=bn"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+              className="text-green-200 hover:text-white transition-colors duration-300"
+            >
+              <FaTwitter size={22} />
             </a>
-            <a href="#" aria-label="LinkedIn">
-              <FaLinkedin className="text-xl hover:text-white/80" />
+
+            <a
+              href="https://www.instagram.com/programminghero/?hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-green-200 hover:text-white transition-colors duration-300"
+            >
+              <FaInstagram size={22} />
             </a>
           </div>
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="bg-green-300 text-black  text-center py-4 text-sm">
+      <div className="bg-green-900 text-green-300 text-center py-4 text-sm">
         © {new Date().getFullYear()} KachaPrice. All rights reserved.
       </div>
     </footer>

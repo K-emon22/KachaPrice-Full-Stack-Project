@@ -7,7 +7,7 @@ import {FaEdit, FaTrash, FaStar, FaPlus} from "react-icons/fa";
 import {motion, AnimatePresence} from "framer-motion";
 import UserRoleCheck from "../../../RoleCheck/UserRoleCheck";
 
-// --- Reusable, Memoized Modal Component ---
+
 const ReviewModal = memo(
   ({isOpen, onClose, onSubmit, existingReview, productId, user, loading}) => {
     const [rating, setRating] = useState(0);
@@ -149,7 +149,7 @@ const ReviewSection = ({productId, accessToken}) => {
       const res = await axios.get(`${API}/reviews/${productId}`, {
         headers: {Authorization: `Bearer ${accessToken}`},
       });
-      // Sort reviews to show the newest first
+
       const sortedReviews = res.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -161,7 +161,7 @@ const ReviewSection = ({productId, accessToken}) => {
         setUserReview(existing || null);
       }
     } catch {
-      // fail silently on fetch error
+
     }
   };
 
@@ -184,7 +184,7 @@ const ReviewSection = ({productId, accessToken}) => {
       });
 
       toast.success(userReview ? "Review updated!" : "Review submitted!");
-      await fetchReviews(); // Refetch to get the latest list
+      await fetchReviews(); 
       setIsModalOpen(false);
     } catch (err) {
       toast.error(err.response?.data?.message || "Could not submit review.");

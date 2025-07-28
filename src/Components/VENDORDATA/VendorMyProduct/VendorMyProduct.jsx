@@ -15,15 +15,15 @@ import {
   FaTasks,
   FaClipboardCheck,
   FaEllipsisV,
-  FaInfoCircle, // Added Icon
+  FaInfoCircle, 
 } from "react-icons/fa";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {Link} from "react-router"; // CORRECTED import
+import {Link} from "react-router"; 
 import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_API;
 
-// --- Data Fetching ---
+
 const fetchVendorProducts = async (email, accessToken) => {
   const {data} = await axios.get(
     `${BASE_URL}/allProduct/email?email=${email}`,
@@ -34,7 +34,7 @@ const fetchVendorProducts = async (email, accessToken) => {
   return data;
 };
 
-// --- Reusable UI Components ---
+
 const StatusBadge = ({status}) => {
   const styles = {
     pending: {
@@ -129,9 +129,9 @@ const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
 
   const {positionClasses, animation} = getMenuConfig();
 
-  // --- NEW: Function to show rejection reason modal ---
+
   const handleShowReason = () => {
-    setMenuOpen(false); // Close the action menu first
+    setMenuOpen(false); 
     Swal.fire({
       title: "Reason for Rejection",
       text: product.rejectionReason,
@@ -192,7 +192,7 @@ const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
                 exit={animation.exit}
               >
                 <ul className="p-1">
-                  {/* --- NEW: Conditional "View Reason" Button --- */}
+
                   {product.status === "rejected" && product.rejectionReason && (
                     <li>
                       <button
@@ -242,7 +242,7 @@ const ProductTableRow = ({product, index, onDelete, isLast, totalItems}) => {
   );
 };
 
-// --- Main Component ---
+
 const VendorMyProduct = () => {
   useEffect(() => {
     window.scrollTo({top: 0, behavior: "smooth"});
@@ -300,7 +300,7 @@ const VendorMyProduct = () => {
 
   return (
     <div className="min-h-screen pt-0 mt-16 p-4 sm:p-6 lg:p-8">
-      {/* --- Header --- */}
+
       <motion.div
         className="flex flex-col sm:flex-row justify-between items-center mb-8"
         initial={{opacity: 0, y: -20}}
@@ -327,7 +327,7 @@ const VendorMyProduct = () => {
         )}
       </motion.div>
 
-      {/* --- Main Content Area --- */}
+
       {isLoading ? (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
@@ -362,7 +362,7 @@ const VendorMyProduct = () => {
         </motion.div>
       ) : (
         <div className="space-y-8">
-          {/* --- Products Table (Scrollable) --- */}
+
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
@@ -400,7 +400,7 @@ const VendorMyProduct = () => {
             </div>
           </div>
 
-          {/* --- Statistics Section --- */}
+
           <motion.div
             className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl shadow-lg p-6 grid grid-cols-3 gap-6 text-center"
             initial={{opacity: 0, y: 20}}

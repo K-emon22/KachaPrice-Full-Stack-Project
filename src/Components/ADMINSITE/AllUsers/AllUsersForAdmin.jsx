@@ -1,29 +1,28 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {AuthContext} from "../../ContextFiles/AuthContext";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {motion, AnimatePresence} from "framer-motion";
+
 import {
   FaUserShield,
   FaUser,
   FaUserTie,
   FaUsers,
-  FaStore,
-  FaCheck,
+  FaSearch,
 } from "react-icons/fa";
 
-const BASE_URL = import.meta.env.VITE_API; // Your VITE_API_URL
+const BASE_URL = import.meta.env.VITE_API;
 
-// --- Data Fetching Function for React Query ---
-const fetchUsers = async (accessToken) => {
+const fetchUsers = async (accessToken, searchText) => {
   const {data} = await axios.get(`${BASE_URL}/allUser`, {
     headers: {Authorization: `Bearer ${accessToken}`},
+    params: {search: searchText},
   });
   return Array.isArray(data) ? data : [];
 };
 
-// --- Reusable Components ---
 const UserRowSkeleton = () => (
   <tr className="animate-pulse">
     <td className="p-4">
@@ -105,7 +104,7 @@ const UserRow = ({user, index, onMakeAdmin, onMakeVendor}) => {
         {user.role !== "admin" ? (
           <motion.button
             onClick={() => onMakeAdmin(user._id)}
-            className="bg-slate-200 text-slate-800 w-full text-center justify-center  mx-auto text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-300 transition-all flex items-center gap-1.5"
+            className="bg-slate-200 text-slate-800 w-full text-center justify-center mx-auto text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-300 transition-all flex items-center gap-1.5"
             whileHover={{scale: 1.05, y: -1}}
             whileTap={{scale: 0.95}}
           >
@@ -127,6 +126,7 @@ const AllUsersForAdmin = () => {
   }, []);
 
   const {accessToken, loading: authLoading} = useContext(AuthContext);
+  const [searchText, setSearchText] = useState("");
   const queryClient = useQueryClient();
 
   const {
@@ -134,8 +134,8 @@ const AllUsersForAdmin = () => {
     isLoading: usersLoading,
     error,
   } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: () => fetchUsers(accessToken),
+    queryKey: ["allUsers", searchText],
+    queryFn: () => fetchUsers(accessToken, searchText),
     enabled: !!accessToken,
   });
 
@@ -161,7 +161,7 @@ const AllUsersForAdmin = () => {
         );
         if (res.data.success) {
           Swal.fire("Success!", "User has been promoted to Admin.", "success");
-          queryClient.invalidateQueries({queryKey: ["allUsers"]});
+          queryClient.invalidateQueries({queryKey: ["allUsers", searchText]});
         } else {
           Swal.fire(
             "Failed",
@@ -200,7 +200,7 @@ const AllUsersForAdmin = () => {
         );
         if (res.data.success) {
           Swal.fire("Success!", "User has been promoted to Vendor.", "success");
-          queryClient.invalidateQueries({queryKey: ["allUsers"]});
+          queryClient.invalidateQueries({queryKey: ["allUsers", searchText]});
         } else {
           Swal.fire(
             "Failed",
@@ -220,7 +220,7 @@ const AllUsersForAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen  pt-0 my-16 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen pt-0 my-16 p-4 sm:p-6 lg:p-8">
       <motion.div
         className="text-center mb-12"
         initial={{opacity: 0, y: -20}}
@@ -233,6 +233,21 @@ const AllUsersForAdmin = () => {
           View and manage all users on the platform.
         </p>
       </motion.div>
+
+      {/* --- MODIFICATION START: "Cooler" Search Bar --- */}
+      <div className="relative mb-6 max-w-md mx-auto">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+          <FaSearch className="text-slate-400" />
+        </span>
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="w-full border border-slate-300 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 transition-all"
+        />
+      </div>
+      {/* --- MODIFICATION END --- */}
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
@@ -280,11 +295,13 @@ const AllUsersForAdmin = () => {
             </tbody>
           </table>
         </div>
+
         {!isLoading && error && (
           <div className="text-red-500 p-4 text-center">
             {error.message || "Failed to load users."}
           </div>
         )}
+
         {!isLoading && !error && users.length === 0 && (
           <div className="text-center py-16 px-6">
             <FaUsers className="mx-auto text-5xl text-slate-400 mb-4" />
@@ -292,7 +309,7 @@ const AllUsersForAdmin = () => {
               No Users Found
             </h3>
             <p className="text-slate-500 mt-2">
-              There are no registered users to display at the moment.
+              There are no users matching your search.
             </p>
           </div>
         )}

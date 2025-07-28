@@ -7,7 +7,7 @@ import { FaSearch, FaArrowRight } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 
-// ✅ Refined Skeleton Loader Component
+
 const ProductCardSkeleton = () => (
   <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
     <div className="bg-slate-200 h-52 w-full"></div>
@@ -31,12 +31,12 @@ const AllProduct = () => {
   const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Pagination states
+
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [totalProducts, setTotalProducts] = useState(0);
 
-  // Create a ref for the search input element
+
   const searchInputRef = useRef(null);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const AllProduct = () => {
     setToDate(formatDate(to));
   }, []);
 
-  // This effect ensures a smooth scroll to the top when the page changes
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
@@ -76,7 +76,7 @@ const AllProduct = () => {
     return () => clearTimeout(delayDebounce);
   }, [searchText, sort, fromDate, toDate, page]);
 
-  // This new effect will re-focus the input after a search
+
   useEffect(() => {
     if (!loading && searchText && searchInputRef.current) {
       searchInputRef.current.focus();

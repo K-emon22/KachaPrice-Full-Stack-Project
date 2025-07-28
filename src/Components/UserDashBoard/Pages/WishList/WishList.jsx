@@ -3,7 +3,7 @@ import {useQuery, useQueries, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {AuthContext} from "../../../ContextFiles/AuthContext";
 import {FaEye, FaTrash, FaPlus} from "react-icons/fa";
-import {Link} from "react-router"; // ✅ Corrected import
+import {Link} from "react-router"; 
 import {toast} from "react-toastify";
 import Swal from "sweetalert2";
 import {motion, AnimatePresence} from "framer-motion";
@@ -24,7 +24,7 @@ const fetchProductById = async (id, token) => {
   return data;
 };
 
-// --- Reusable Components ---
+
 const WishlistItemSkeleton = () => (
   <div className="bg-white p-4 rounded-xl shadow-sm animate-pulse">
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -87,7 +87,7 @@ const WishlistItem = ({item, productData, onRemove, isDeleting, index}) => {
           </div>
         </div>
 
-        {/* Details & Actions */}
+
         <div className="flex items-center justify-between mt-4 sm:mt-0 sm:justify-end sm:gap-6 flex-shrink-0">
           <div className="text-left">
             <p className="text-xs text-slate-500">Current Price</p>
@@ -259,16 +259,7 @@ const WishList = () => {
           </div>
         )}
 
-        {/* {!isLoading && wishlist.length > 0 && (
-          <div className="flex justify-center items-center mt-10">
-            <Link
-              to={"/allproduct"}
-              className="bg-green-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-green-700 transition-colors inline-flex items-center gap-2"
-            >
-              <FaPlus /> Add More Products
-            </Link>
-          </div>
-        )} */}
+       
       </div>
     </div>
   );

@@ -122,7 +122,7 @@ useEffect(() => {
         animate={{opacity: 1, scale: 1}}
         transition={{duration: 0.5, ease: "easeInOut"}}
       >
-        {/* Left Panel */}
+
         <div className="animated-sea-green hidden md:flex flex-col justify-center p-12 bg-gradient-to-br from-green-500 to-emerald-600 text-white">
           <motion.h1
             className="text-4xl font-extrabold leading-tight"
@@ -142,7 +142,7 @@ useEffect(() => {
           </motion.p>
         </div>
 
-        {/* Right Panel (Form) */}
+
         <div className="p-8 sm:p-12">
           <motion.div
             variants={containerVariants}
