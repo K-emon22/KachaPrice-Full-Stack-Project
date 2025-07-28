@@ -5,8 +5,8 @@
 
 **KachaPrice** is a full-stack MERN application designed to provide users with up-to-date local market prices for essential items. The platform allows users to compare prices across different markets, track trends, and make informed purchasing decisions. It features a role-based system for Users, Vendors, and Admins, creating a dynamic and interactive community-driven marketplace.
 
-**Live Link:** [https://your-live-project-url.com](https://kachaprice.netlify.app/)  
-**Server-Side Repo:** [https://github.com/your-username/kachadam-server](https://github.com/your-username/kachadam-server)
+**Live Link:** [KachaDam](https://kachaprice.netlify.app/)  
+**Server-Side Repo:** [Server site](https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-K-emon22.git)
 
 ---
 
