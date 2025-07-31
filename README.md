@@ -1,4 +1,4 @@
-# KachaDam - Daily Price Tracker for Local Markets
+# KachaPrice - Daily Price Tracker for Local Markets
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tech Stack](https://img.shields.io/badge/MERN-Stack-blue?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
