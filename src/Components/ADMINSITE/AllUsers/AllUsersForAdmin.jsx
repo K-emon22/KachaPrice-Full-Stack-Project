@@ -74,10 +74,14 @@ const UserRow = ({user, index, onMakeAdmin, onMakeVendor}) => {
           className="w-10 h-10 rounded-full object-cover"
         />
       </td>
-      <td className="p-4 align-middle font-bold text-slate-800">
+
+      <td className="p-4 align-middle font-bold text-slate-800 break-words">
         {user.name || "N/A"}
       </td>
-      <td className="p-4 align-middle text-slate-600">{user.email}</td>
+
+      <td className="p-4 align-middle text-slate-600 break-words">
+        {user.email}
+      </td>
       <td className="p-4 align-middle">
         <span className="flex items-center gap-2 capitalize">
           {roleIcons[user.role] || roleIcons.user}
@@ -96,7 +100,7 @@ const UserRow = ({user, index, onMakeAdmin, onMakeVendor}) => {
           </motion.button>
         ) : (
           <div className=" text-black bg-green-100 text-sm font-semibold px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5">
-            No Request
+            No
           </div>
         )}
       </td>
@@ -234,7 +238,6 @@ const AllUsersForAdmin = () => {
         </p>
       </motion.div>
 
-      {/* --- MODIFICATION START: "Cooler" Search Bar --- */}
       <div className="relative mb-6 max-w-md mx-auto">
         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
           <FaSearch className="text-slate-400" />
@@ -247,29 +250,28 @@ const AllUsersForAdmin = () => {
           className="w-full border border-slate-300 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 transition-all"
         />
       </div>
-      {/* --- MODIFICATION END --- */}
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full table-fixed">
+          <table className="min-w-full">
             <thead className="bg-slate-100">
               <tr>
-                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-[10%]">
+                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
                   Avatar
                 </th>
-                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-[25%]">
+                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-[25%]">
+                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
                   Email
                 </th>
-                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-[10%]">
+                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-[15%]">
+                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
                   Vendor Request
                 </th>
-                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-[15%]">
+                <th className="p-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
                   Make Admin
                 </th>
               </tr>
@@ -301,7 +303,7 @@ const AllUsersForAdmin = () => {
             {error.message || "Failed to load users."}
           </div>
         )}
-
+  
         {!isLoading && !error && users.length === 0 && (
           <div className="text-center py-16 px-6">
             <FaUsers className="mx-auto text-5xl text-slate-400 mb-4" />
@@ -311,7 +313,7 @@ const AllUsersForAdmin = () => {
             <p className="text-slate-500 mt-2">
               There are no users matching your search.
             </p>
-          </div>
+          </div> 
         )}
       </div>
     </div>
